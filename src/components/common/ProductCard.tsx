@@ -2,17 +2,18 @@ import React from 'react';
 import { Card, Button, message } from 'antd';
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/Features/user/cart.api';
+import { useAppDispatch } from '../../redux/hooks';
 
 interface ProductCardProps {
   product: any;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleAddToCart = () => {
-    // dispatch(addToCart(product));
+    dispatch(addToCart(product));
     message.success('Added to cart');
   };
 

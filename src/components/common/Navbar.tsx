@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Menu, Dropdown } from "antd";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,10 +11,18 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useAppSelector(useCurrentUser);
-  const items  = useSelector((state: RootState) => state?.cart);
+  // const items  = useSelector((state: RootState) => state?.cart?.items);
 
 
-  console.log(user, items,"user from navbar");
+  const cartItems = useSelector((state: RootState) => state?.cart?.items);
+  const state = useSelector((state: RootState) => state);
+  const [localCart, setLocalCart] = useState(cartItems);
+
+  useEffect(() => {
+    setLocalCart(cartItems);
+  }, [cartItems]);
+
+  console.log(localCart,"user from navbar", state);
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
@@ -79,9 +87,9 @@ const Navbar: React.FC = () => {
           <div className="flex items-center">
             <Link to="/cart" className="relative p-2">
               <ShoppingCart className="h-6 w-6 text-gray-600" />
-              {items?.length > 0 && (
+              {localCart?.length > 0 && (
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-indigo-600 rounded-full">
-                  {items?.length}
+                  {localCart?.length}
                 </span>
               )}
             </Link>

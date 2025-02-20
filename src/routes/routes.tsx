@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
+import Cart from "../pages/Cart";
 
 export const router = createBrowserRouter([
   {
@@ -15,14 +16,14 @@ export const router = createBrowserRouter([
       //   { path: "contact", element: <Contact /> },
       { path: "login", element: <Login /> },
       //   { path: "register", element: <Register /> },
-      //   {
-      //     path: "cart",
-      //     element: (
-      //       <PrivateRoute>
-      //         <Cart />
-      //       </PrivateRoute>
-      //     ),
-      //   },
+        {
+          path: "cart",
+          element: (
+            // <PrivateRoute>
+              <Cart />
+            // </PrivateRoute>
+          ),
+        },
       //   {
       //     path: "dashboard/*",
       //     element: (
