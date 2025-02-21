@@ -16,6 +16,15 @@ const productApi = baseApi.injectEndpoints({
       }),
       providesTags: ["products"],
     }),
+    getAProductData: builder.query({
+      query: (productId) => {
+        console.log(productId, "in api")
+        return {
+          url: `/product/${productId}`,
+        };
+      },
+      providesTags: ["products"],
+    }),
     deleteProduct: builder.mutation({
       query: (bookId) => {
         console.log(bookId, "Marking as deleted");
@@ -47,4 +56,5 @@ export const {
   useGetAllProductDataQuery,
   useDeleteProductMutation,
   useUpdateProductMutation,
+  useGetAProductDataQuery,
 } = productApi;

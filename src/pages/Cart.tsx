@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   Button,
   Card,
@@ -7,39 +7,88 @@ import {
   Table,
   message,
   Divider,
-} from 'antd';
-import { Trash2 } from 'lucide-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../redux/store';
-import { clearCart, removeFromCart, updateQuantity } from '../redux/Features/productManagement/cart.api';
-
+} from "antd";
+import { Trash2 } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../redux/store";
+import {
+  clearCart,
+  removeFromCart,
+  updateQuantity,
+} from "../redux/Features/productManagement/cart.api";
+import { useNavigate } from "react-router-dom";
+import { useAddOrderMutation } from "../redux/Features/OrderManagement/orderApi";
+import { useAppSelector } from "../redux/hooks";
+import { useCurrentUser } from "../redux/auth/authSlice";
+import { toast } from "sonner";
+import { TOrder } from "../types";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
-  const  items  = useSelector((state: RootState) => state?.cart?.items);
+  const items = useSelector((state: RootState) => state?.cart?.items);
+  // payment
+  const user = useAppSelector(useCurrentUser);
+  const [addOrder] = useAddOrderMutation();
+  const navigate = useNavigate();
 
-  const handleQuantityChange = (id: string, quantity: number) => {
-    dispatch(updateQuantity({ id, quantity }));
+  
+  const total = items?.reduce(
+    (sum, item) => sum + Number(item.price) * Number(item.quantity),
+    0
+  );
+  const handleProceedToBuy = async () => {
+    if (!user) {
+      toast.error("You want to login first..");
+      return navigate("/login");
+    }
+
+    // if (bookData.numberOfBooks < 1) {
+    //   return toast.error("Insufficient stock", { duration: 2000 });
+    // }
+
+    // console.log(id);
+    // if (user?.email === bookData?.authorEmail) {
+    //   return toast.error("You cannot buy your own product");
+    // }
+
+    const orderInfo: TOrder = {
+      product: items,
+      // _id: [...id],
+      total_order_amount: total,
+      userInfo: {
+        ...user,
+      },
+    };
+console.log(orderInfo)
+    const result = await addOrder(orderInfo).unwrap();
+
+    window.location.replace(result.url);
   };
 
-  const handleRemoveItem = (id: string) => {
-    dispatch(removeFromCart(id));
-    message.success('Item removed from cart');
+
+  const handleQuantityChange = (_id: string, quantity: number) => {
+    console.log("hi", _id, quantity);
+    dispatch(updateQuantity({ _id, quantity }));
+  };
+
+  const handleRemoveItem = (_id: string) => {
+    dispatch(removeFromCart(_id));
+    message.success("Item removed from cart");
   };
 
   const handleClearCart = () => {
     dispatch(clearCart());
-    message.success('Cart cleared');
+    message.success("Cart cleared");
   };
 
   const columns = [
     {
-      title: 'Product',
-      dataIndex: 'title',
+      title: "Product",
+      dataIndex: "title",
       render: (text: string, record: any) => (
         <div className="flex items-center">
           <img
-            src={record.image}
+            src={record.imageUrl}
             alt={text}
             className="w-16 h-16 object-cover rounded mr-4"
           />
@@ -51,46 +100,44 @@ const Cart: React.FC = () => {
       ),
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
+      title: "Price",
+      dataIndex: "price",
       render: (price: number) => `$${Number(price)?.toFixed(2)}`,
     },
     {
-      title: 'Quantity',
-      dataIndex: 'quantity',
+      title: "Quantity",
+      dataIndex: "quantity",
       render: (quantity: number, record: any) => (
         <InputNumber
           min={1}
           max={record.stock}
           value={quantity}
-          onChange={(value) => handleQuantityChange(record.id, value || 1)}
+          onChange={(value) => handleQuantityChange(record._id, value || 1)}
         />
       ),
     },
     {
-      title: 'Total',
-      dataIndex: 'total',
+      title: "Total",
+      dataIndex: "total",
       render: (_: any, record: any) =>
-        `$${((Number(record?.price) || 0) * (Number(record?.quantity) || 0)).toFixed(2)}`,
+        `$${(
+          (Number(record?.price) || 0) * (Number(record?.quantity) || 0)
+        ).toFixed(2)}`,
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: "Action",
+      key: "action",
       render: (_: any, record: any) => (
         <Button
           type="text"
           danger
           icon={<Trash2 className="h-5 w-5" />}
-          onClick={() => handleRemoveItem(record.id)}
+          onClick={() => handleRemoveItem(record._id)}
         />
       ),
     },
   ];
 
-  const total = items?.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
 
   if (items?.length === 0) {
     return (
@@ -102,7 +149,7 @@ const Cart: React.FC = () => {
       </div>
     );
   }
-
+  // const allItemsId = items?.map((item) => item?._id);
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex justify-between items-center mb-6">
@@ -112,13 +159,12 @@ const Cart: React.FC = () => {
         </Button>
       </div>
 
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <Table
             columns={columns}
             dataSource={items}
-            rowKey="id"
+            rowKey="_id"
             pagination={false}
           />
         </div>
@@ -132,14 +178,19 @@ const Cart: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span>Shipping</span>
-                <span>{total > 50 ? 'Free' : '$5.00'}</span>
+                <span>{total > 50 ? "Free" : "$5.00"}</span>
               </div>
               <Divider />
               <div className="flex justify-between text-lg font-semibold">
                 <span>Total</span>
-                <span>${(total + (total > 50 ? 0 : 5))}</span>
+                <span>${total + (total > 50 ? 0 : 5)}</span>
               </div>
-              <Button type="primary" block size="large">
+              <Button
+                onClick={() => handleProceedToBuy()}
+                type="primary"
+                block
+                size="large"
+              >
                 Proceed to Checkout
               </Button>
             </div>

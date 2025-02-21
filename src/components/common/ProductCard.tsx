@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card, Button, message } from 'antd';
-import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { addToCart } from '../../redux/Features/productManagement/cart.api';
 import { useAppDispatch } from '../../redux/hooks';
+import { TOrderProduct } from '../../types';
 
 interface ProductCardProps {
-  product: any;
+  product: TOrderProduct;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -23,7 +23,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       cover={
         <img
           alt={product?.title}
-          src={product?.image}
+          src={product?.imageUrl}
           className="h-48 w-full object-cover"
         />
       }
@@ -37,17 +37,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             ${product?.price}
           </span>
           <div className="space-x-2">
-            <Link to={`/products/${product?.id}`}>
+            <Link to={`/products/${product?._id}`}>
               <Button type="link">View Details</Button>
             </Link>
-            <Button
+            {/* <Button
               type="primary"
               icon={<ShoppingCart className="h-4 w-4" />}
               onClick={handleAddToCart}
               disabled={product?.stock === 0}
             >
               Add to Cart
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

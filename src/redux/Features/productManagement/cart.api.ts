@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CartItem, Product } from '../../../types';
+import {  TOrderProduct } from '../../../types';
 
 // ✅ Local Storage থেকে Cart Data পাওয়ার ফাংশন
-const loadCartFromLocalStorage = (): CartItem[] => {
+const loadCartFromLocalStorage = (): TOrderProduct[] => {
   const cart = localStorage.getItem("cart");
   return cart ? JSON.parse(cart) : [];
 };
 
 // ✅ Initial State - Local Storage থেকে Data লোড করবো
 interface CartState {
-  items: CartItem[];
+  items: TOrderProduct[];
 }
 
 const initialState: CartState = {
@@ -20,10 +20,11 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state, action: PayloadAction<Product>) => {
+    addToCart: (state, action: PayloadAction<TOrderProduct>) => {
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id
+        (item) => item._id === action.payload._id
       );
+      // console.log(loadCartFromLocalStorage(), "sob items")
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
@@ -33,15 +34,15 @@ const cartSlice = createSlice({
     },
 
     removeFromCart: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
+      state.items = state.items.filter((item) => item._id !== action.payload);
       localStorage.setItem("cart", JSON.stringify(state.items)); // ✅ Local Storage Update
     },
 
     updateQuantity: (
       state,
-      action: PayloadAction<{ id: string; quantity: number }>
+      action: PayloadAction<{ _id: string; quantity: number }>
     ) => {
-      const item = state.items.find((item) => item.id === action.payload.id);
+      const item = state.items.find((item) => item._id === action.payload._id);
       if (item) {
         item.quantity = action.payload.quantity;
       }

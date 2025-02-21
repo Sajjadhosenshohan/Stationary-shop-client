@@ -39,7 +39,7 @@ export interface User {
 }
 
 export interface Product {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   price: number;
@@ -48,15 +48,50 @@ export interface Product {
   image: string;
 }
 
-export interface CartItem extends Product {
-  quantity: number;
-}
+// export interface CartItem extends Product {
+//   quantity: number;
+// }
 
 export interface Order {
-  id: string;
+  _id: string;
   userId: string;
   items: CartItem[];
   total: number;
   status: 'pending' | 'shipping' | 'delivered';
   createdAt: string;
+}
+
+
+
+//
+// Types
+export interface TOrderProduct {
+  _id: string; // MongoDB ObjectId as a string
+  title: string;
+  numberOfProduct: number;
+  description: string;
+  price: number; // Price as a string (consider converting to number if necessary)
+  category: string;
+  imageUrl: string;
+  authorName: string;
+  authorEmail: string;
+  isAvailable: boolean;
+  isDeleted: boolean;
+  quantity: number;
+  __v: number;
+}
+
+export interface CartItem extends TOrderProduct {
+  quantity: number;
+}
+export type TUserInfo = {
+  name: string;
+  email: string;
+  role: string;
+}
+
+export type TOrder = {
+  product: TOrderProduct[];
+  total_order_amount: number;
+  userInfo: TUserInfo;
 }

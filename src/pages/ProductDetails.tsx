@@ -1,5 +1,5 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React from "react";
+import { useParams } from "react-router-dom";
 import {
   Button,
   Card,
@@ -8,16 +8,20 @@ import {
   Tabs,
   message,
   Breadcrumb,
-} from 'antd';
-import { ShoppingCart, Package } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+} from "antd";
+import { ShoppingCart, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useGetAProductDataQuery } from "../redux/Features/productManagement/productApi";
+import { addToCart } from "../redux/Features/productManagement/cart.api";
 
 const ProductDetails: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{ id: string }>();
   const dispatch = useDispatch();
-  const { data: product, isLoading } = useGetProductQuery(id!);
+  const { data: res, isLoading } = useGetAProductDataQuery(id!);
+  const product = res?.data;
   const [quantity, setQuantity] = React.useState(1);
+  console.log(product, id,"product");
 
   if (isLoading) {
     return (
@@ -40,7 +44,7 @@ const ProductDetails: React.FC = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({ ...product, quantity }));
-    message.success('Added to cart');
+    message.success("Added to cart");
   };
 
   return (
@@ -58,7 +62,7 @@ const ProductDetails: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <img
-            src={product.image}
+            src={product.imageUrl}
             alt={product.title}
             className="w-full rounded-lg shadow-lg"
           />
@@ -70,7 +74,7 @@ const ProductDetails: React.FC = () => {
           <p className="text-gray-500 mb-6">{product.description}</p>
           <div className="flex items-center mb-6">
             <span className="text-3xl font-bold text-indigo-600">
-              ${product.price.toFixed(2)}
+              ${Number(product.price).toFixed(2)}
             </span>
             <span className="ml-4 text-sm text-gray-500">
               {product.stock} in stock
@@ -102,13 +106,13 @@ const ProductDetails: React.FC = () => {
           <Tabs
             items={[
               {
-                key: '1',
-                label: 'Description',
+                key: "1",
+                label: "Description",
                 children: <p>{product.description}</p>,
               },
               {
-                key: '2',
-                label: 'Specifications',
+                key: "2",
+                label: "Specifications",
                 children: (
                   <ul className="list-disc pl-4">
                     <li>Category: {product.category}</li>
@@ -118,8 +122,8 @@ const ProductDetails: React.FC = () => {
                 ),
               },
               {
-                key: '3',
-                label: 'Shipping',
+                key: "3",
+                label: "Shipping",
                 children: (
                   <div>
                     <p>Standard shipping: 3-5 business days</p>
