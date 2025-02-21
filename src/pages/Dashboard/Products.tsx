@@ -77,7 +77,7 @@ const Products: React.FC = () => {
             ...productData,
           },
         });
-        console.log(update, "updasdjfkslk");
+        console.log(update, "update");
         toast.success("Product updated successfully", { id: toastId });
       } else {
         await addProduct(productData);
@@ -94,8 +94,9 @@ const Products: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteProduct(id);
-      setProducts(products.filter((product) => product._id !== id)); // Remove from local state
+      const res = await deleteProduct(id);
+      console.log("handle deleted", res)
+      // setProducts(products.filter((product) => product._id !== id)); // Remove from local state
       toast.success("Product deleted successfully");
     } catch (err) {
       console.error("Error deleting product:", err);

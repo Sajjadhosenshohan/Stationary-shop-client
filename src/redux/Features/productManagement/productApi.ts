@@ -1,6 +1,5 @@
 import { baseApi } from "../../api/baseApi";
 
-
 const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addProduct: builder.mutation({
@@ -9,29 +8,36 @@ const productApi = baseApi.injectEndpoints({
         method: "POST",
         body: bookInfo,
       }),
-      invalidatesTags: ["products"]
+      invalidatesTags: ["products"],
     }),
     getAllProductData: builder.query({
       query: () => ({
         url: "/product/",
       }),
-      providesTags: ["products"]
+      providesTags: ["products"],
     }),
     deleteProduct: builder.mutation({
-      query: (bookId) => ({
-        url: "/product/delete-product",
-        method: "PUT",
-        body: bookId,
-      }),
-      invalidatesTags: ["products"]
+      query: (bookId) => {
+        console.log(bookId, "Marking as deleted");
+        return {
+          url: `/product/delete-product`,
+          method: "PUT",
+          body: {
+            productId: bookId, // sending productId in the body
+            productInfo: { isDeleted: true }, // setting isDeleted to true
+          },
+        };
+      },
+      invalidatesTags: ["products"],
     }),
+
     updateProduct: builder.mutation({
       query: (bookData) => ({
         url: "/product/update-product",
         method: "PUT",
         body: bookData,
       }),
-      invalidatesTags: ["products"]
+      invalidatesTags: ["products"],
     }),
   }),
 });
