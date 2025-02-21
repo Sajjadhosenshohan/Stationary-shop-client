@@ -11,7 +11,7 @@ import {
 import { Trash2 } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../redux/store';
-import { clearCart, removeFromCart, updateQuantity } from '../redux/Features/user/cart.api';
+import { clearCart, removeFromCart, updateQuantity } from '../redux/Features/productManagement/cart.api';
 
 
 const Cart: React.FC = () => {

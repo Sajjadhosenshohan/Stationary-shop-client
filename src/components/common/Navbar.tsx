@@ -15,14 +15,13 @@ const Navbar: React.FC = () => {
 
 
   const cartItems = useSelector((state: RootState) => state?.cart?.items);
-  const state = useSelector((state: RootState) => state);
   const [localCart, setLocalCart] = useState(cartItems);
 
   useEffect(() => {
     setLocalCart(cartItems);
   }, [cartItems]);
 
-  console.log(localCart,"user from navbar", state);
+  // console.log(localCart,"user from navbar", state);
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");

@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, Button, message } from 'antd';
 import { ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { addToCart } from '../../redux/Features/user/cart.api';
+import { addToCart } from '../../redux/Features/productManagement/cart.api';
 import { useAppDispatch } from '../../redux/hooks';
 
 interface ProductCardProps {

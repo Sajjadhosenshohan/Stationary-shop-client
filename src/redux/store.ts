@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth/authSlice";
-import cartReducer from "./Features/user/cart.api";
+import cartReducer from "./Features/productManagement/cart.api";
 import { baseApi } from "./api/baseApi";
 import {
   persistReducer,

@@ -2,14 +2,14 @@ import React from "react";
 import { Button, Carousel, Card } from "antd";
 import { ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useGetAllProductsQuery } from "../redux/Features/admin/productManagement.api";
 import ProductCard from "../components/common/ProductCard";
+import { useGetAllProductDataQuery } from "../redux/Features/productManagement/productApi";
 
 // import { useGetProductsQuery } from '../store/api';
 // import ProductCard from '../components/ProductCard';
 
 const Home: React.FC = () => {
-  const { data: res, isLoading } = useGetAllProductsQuery({ limit: 6 });
+  const { data: res, isLoading } = useGetAllProductDataQuery({ limit: 6 });
   const products = res?.data?.result;
   console.log(products, "home");
   const carouselItems = [

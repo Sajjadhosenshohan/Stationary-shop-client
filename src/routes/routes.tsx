@@ -3,6 +3,8 @@ import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Cart from "../pages/Cart";
+import Products from "../pages/Products";
+import Dashboard from "../pages/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -10,8 +12,8 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-      //   { path: "products", element: <Products /> },
-      //   { path: "products/:id", element: <ProductDetails /> },
+        { path: "products", element: <Products /> },
+        // { path: "products/:id", element: <ProductDetails /> },
       //   { path: "about", element: <About /> },
       //   { path: "contact", element: <Contact /> },
       { path: "login", element: <Login /> },
@@ -24,15 +26,15 @@ export const router = createBrowserRouter([
             // </PrivateRoute>
           ),
         },
-      //   {
-      //     path: "dashboard/*",
-      //     element: (
-      //       <PrivateRoute>
-      //         <Dashboard />
-      //       </PrivateRoute>
-      //     ),
-      //   },
-      //   { path: "*", element: <NotFound /> },
+        {
+          path: "dashboard/*",
+          element: (
+            // <PrivateRoute>
+              <Dashboard />
+            // </PrivateRoute>
+          ),
+        },
+        // { path: "*", element: <NotFound /> },
     ],
   },
 ]);

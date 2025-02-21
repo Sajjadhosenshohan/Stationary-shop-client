@@ -6,9 +6,10 @@ type TInputProps = {
   name: string;
   label?: string;
   disabled?: boolean;
+  defaultValue?: any;
 };
 
-const PHInput = ({ type, name, label, disabled }: TInputProps) => {
+const PHInput = ({ type, name, label, disabled,defaultValue }: TInputProps) => {
   return (
     <div style={{ marginBottom: '20px' }}>
       <Controller
@@ -21,6 +22,7 @@ const PHInput = ({ type, name, label, disabled }: TInputProps) => {
               id={name}
               size="large"
               disabled={disabled}
+              defaultValue={defaultValue}
             />
           </Form.Item>
         )}
