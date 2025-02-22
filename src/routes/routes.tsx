@@ -6,6 +6,8 @@ import Cart from "../pages/Cart";
 import Products from "../pages/Products";
 import Dashboard from "../pages/Dashboard";
 import ProductDetails from "../pages/ProductDetails";
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
+import { PaymentFailed } from "../pages/payment/PaymentFailed";
 
 export const router = createBrowserRouter([
   {
@@ -15,6 +17,8 @@ export const router = createBrowserRouter([
       { index: true, element: <Home /> },
         { path: "products", element: <Products /> },
         { path: "products/:id", element: <ProductDetails /> },
+        { path: "/payment-successful/:transactionId", element: <PaymentSuccess /> },
+        { path: "/payment-failed/:transactionId", element: <PaymentFailed /> },
       //   { path: "about", element: <About /> },
       //   { path: "contact", element: <Contact /> },
       { path: "login", element: <Login /> },

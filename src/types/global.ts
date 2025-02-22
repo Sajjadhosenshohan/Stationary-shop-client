@@ -91,7 +91,11 @@ export type TUserInfo = {
 }
 
 export type TOrder = {
-  product: TOrderProduct[];
+  _id: string;
+  products: TOrderProduct[];
   total_order_amount: number;
+  orderStatus: string;
+  transactionId: string;
+  isDeleted: true;
   userInfo: TUserInfo;
 }

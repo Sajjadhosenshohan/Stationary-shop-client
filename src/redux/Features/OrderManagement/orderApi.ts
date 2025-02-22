@@ -3,46 +3,36 @@ import { baseApi } from "../../api/baseApi";
 const orderApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     addOrder: builder.mutation({
-      query: (bookInfo) => ({
+      query: (productInfo) => ({
         url: "/order",
         method: "POST",
-        body: bookInfo,
+        body: productInfo,
       }),
     }),
     getAdminOrdersData: builder.query({
       query: (userEmail) => ({
         url: "/payment/get-admin-order-data",
-        method: "PUT",
+        method: "POST",
         body: { email: userEmail }, // অবজেক্ট আকারে ইমেইল পাঠানো হচ্ছে
-        headers: {
-          "Content-Type": "application/json", // JSON ডেটা প্রেরণের জন্য সঠিক হেডার
-        },
+        
       }),
     }),
     getUserOrdersData: builder.query({
       query: (userEmail) => ({
         url: "/payment/get-user-order-data",
-        method: "PUT",
-        body: { email: userEmail }, // অবজেক্ট আকারে ইমেইল পাঠানো হচ্ছে
-        headers: {
-          "Content-Type": "application/json", // JSON ডেটা প্রেরণের জন্য সঠিক হেডার
-        },
+        method: "POST",
+        body: { email: userEmail } // অবজেক্ট আকারে ইমেইল পাঠানো হচ্ছে
+        
       }),
+      providesTags:["orderHistory"]
     }),
-
-    acceptOrder: builder.mutation({
-      query: (bookInfo) => ({
-        url: "/payment/accept-order",
+    changeOrderStatus: builder.mutation({
+      query: (productInfo) => ({
+        url: "/payment/change-order-status",
         method: "PUT",
-        body: bookInfo,
+        body: productInfo,
       }),
-    }),
-    cencelOrder: builder.mutation({
-      query: (bookInfo) => ({
-        url: "/payment/cencel-order",
-        method: "PUT",
-        body: bookInfo,
-      }),
+      invalidatesTags: ["orderHistory"]
     }),
     deleteOrder: builder.mutation({
       query: (orderInfo) => ({
@@ -50,6 +40,7 @@ const orderApi = baseApi.injectEndpoints({
         method: "PUT",
         body: orderInfo,
       }),
+      invalidatesTags: ["orderHistory"]
     }),
   }),
 });
@@ -58,7 +49,6 @@ export const {
   useAddOrderMutation,
   useGetAdminOrdersDataQuery,
   useGetUserOrdersDataQuery,
-  useAcceptOrderMutation,
-  useCencelOrderMutation,
   useDeleteOrderMutation,
+  useChangeOrderStatusMutation
 } = orderApi;

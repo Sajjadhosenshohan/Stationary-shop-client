@@ -31,7 +31,6 @@ const Cart: React.FC = () => {
   const [addOrder] = useAddOrderMutation();
   const navigate = useNavigate();
 
-  
   const total = items?.reduce(
     (sum, item) => sum + Number(item.price) * Number(item.quantity),
     0
@@ -52,19 +51,18 @@ const Cart: React.FC = () => {
     // }
 
     const orderInfo: TOrder = {
-      product: items,
+      products: items,
       // _id: [...id],
       total_order_amount: total,
       userInfo: {
         ...user,
       },
     };
-console.log(orderInfo)
+    console.log(orderInfo);
     const result = await addOrder(orderInfo).unwrap();
 
     window.location.replace(result.url);
   };
-
 
   const handleQuantityChange = (_id: string, quantity: number) => {
     console.log("hi", _id, quantity);
@@ -137,7 +135,6 @@ console.log(orderInfo)
       ),
     },
   ];
-
 
   if (items?.length === 0) {
     return (

@@ -1,1 +1,14 @@
 @import "tailwindcss";
+.orders-table .ant-table-expanded-row > td {
+    padding: 0 !important;
+    background-color: transparent !important;
+  }
+  
+  .nested-table .ant-table {
+    margin: 0 !important;
+    background: white;
+  }
+  
+  .nested-table .ant-table-thead > tr > th {
+    background-color: #f9fafb;
+  }
