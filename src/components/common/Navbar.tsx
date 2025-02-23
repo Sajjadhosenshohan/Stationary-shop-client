@@ -1,49 +1,83 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button, Menu, Dropdown } from "antd";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Button, Menu, Dropdown, Drawer, ConfigProvider, theme } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { PencilRuler, ShoppingCart, User } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  PencilRuler,
+  ShoppingCart,
+  User,
+  Menu as MenuIcon,
+  Home,
+  Info,
+  LogIn,
+  UserPlus,
+  Package,
+} from "lucide-react";
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/auth/authSlice";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const user = useAppSelector(useCurrentUser);
-  // const items  = useSelector((state: RootState) => state?.cart?.items);
-
-
   const cartItems = useSelector((state: RootState) => state?.cart?.items);
-  const [localCart, setLocalCart] = useState(cartItems);
-
-  useEffect(() => {
-    setLocalCart(cartItems);
-  }, [cartItems]);
-
-  // console.log(localCart,"user from navbar", state);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isDashboardRoute = location.pathname.startsWith("/dashboard");
+  console.log(isDashboardRoute);
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
+    setDrawerOpen(false);
   };
 
+  const navigationItems = [
+    { key: "/", label: "Home", icon: <Home className="h-5 w-5" /> },
+    {
+      key: "/dashboard",
+      label: "Dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+    },
+    {
+      key: "/products",
+      label: "All Products",
+      icon: <Package className="h-5 w-5" />,
+    },
+    { key: "/about", label: "About Us", icon: <Info className="h-5 w-5" /> },
+  ];
+
   const userMenu = (
-    <Menu>
+    <Menu className="w-48">
       {user ? (
         <>
-          <Menu.Item key="dashboard">
+          <Menu.Item key="profile" icon={<User className="h-4 w-4" />}>
+            <Link to="/profile">Profile</Link>
+          </Menu.Item>
+          <Menu.Item
+            key="dashboard"
+            icon={<LayoutDashboard className="h-4 w-4" />}
+          >
             <Link to="/dashboard">Dashboard</Link>
           </Menu.Item>
-          <Menu.Item key="logout" onClick={handleLogout}>
+          <Menu.Divider />
+          <Menu.Item
+            key="logout"
+            icon={<LogOut className="h-4 w-4" />}
+            onClick={handleLogout}
+            danger
+          >
             Logout
           </Menu.Item>
         </>
       ) : (
         <>
-          <Menu.Item key="login">
+          <Menu.Item key="login" icon={<LogIn className="h-4 w-4" />}>
             <Link to="/login">Login</Link>
           </Menu.Item>
-          <Menu.Item key="register">
+          <Menu.Item key="register" icon={<UserPlus className="h-4 w-4" />}>
             <Link to="/register">Register</Link>
           </Menu.Item>
         </>
@@ -51,58 +85,197 @@ const Navbar: React.FC = () => {
     </Menu>
   );
 
+  const drawerContent = (
+    <ConfigProvider
+      theme={{
+        algorithm: theme.defaultAlgorithm,
+        token: {
+          colorPrimary: "#dc2626",
+        },
+      }}
+    >
+      <Menu
+        mode="inline"
+        selectedKeys={[location.pathname]}
+        className="border-none"
+      >
+        {navigationItems.map((item) => (
+          <Menu.Item
+            key={item.key}
+            icon={item.icon}
+            onClick={() => {
+              navigate(item.key);
+              setDrawerOpen(false);
+            }}
+          >
+            {item.label}
+          </Menu.Item>
+        ))}
+        <Menu.Divider />
+        {user ? (
+          <>
+            <Menu.Item
+              key="profile"
+              icon={<User className="h-5 w-5" />}
+              onClick={() => {
+                navigate("/profile");
+                setDrawerOpen(false);
+              }}
+            >
+              Profile
+            </Menu.Item>
+            <Menu.Item
+              key="dashboard"
+              icon={<LayoutDashboard className="h-5 w-5" />}
+              onClick={() => {
+                navigate("/dashboard");
+                setDrawerOpen(false);
+              }}
+            >
+              Dashboard
+            </Menu.Item>
+            <Menu.Item
+              key="logout"
+              icon={<LogOut className="h-5 w-5" />}
+              onClick={handleLogout}
+              danger
+            >
+              Logout
+            </Menu.Item>
+          </>
+        ) : (
+          <>
+            <Menu.Item
+              key="login"
+              icon={<LogIn className="h-5 w-5" />}
+              onClick={() => {
+                navigate("/login");
+                setDrawerOpen(false);
+              }}
+            >
+              Login
+            </Menu.Item>
+            <Menu.Item
+              key="register"
+              icon={<UserPlus className="h-5 w-5" />}
+              onClick={() => {
+                navigate("/register");
+                setDrawerOpen(false);
+              }}
+            >
+              Register
+            </Menu.Item>
+          </>
+        )}
+      </Menu>
+    </ConfigProvider>
+  );
+
   return (
-    <nav className="bg-white shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center">
-              <PencilRuler className="h-8 w-8 text-indigo-600" />
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                StationeryShop
-              </span>
-            </Link>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <Link
-                to="/"
-                className="text-gray-900 hover:text-indigo-600 px-3 py-2"
-              >
-                Home
-              </Link>
-              <Link
-                to="/products"
-                className="text-gray-900 hover:text-indigo-600 px-3 py-2"
-              >
-                Products
-              </Link>
-              <Link
-                to="/about"
-                className="text-gray-900 hover:text-indigo-600 px-3 py-2"
-              >
-                About
-              </Link>
+    <div className={` ${isDashboardRoute ? "hidden" : "block"}`}>
+      <ConfigProvider
+        theme={{
+          algorithm: theme.defaultAlgorithm,
+          token: {
+            colorPrimary: "#dc2626",
+          },
+        }}
+      >
+        <nav
+          className={` ${
+            isDashboardRoute ? "hidden" : "block"
+          }bg-white shadow-md fixed w-full top-0 z-50`}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              {/* Logo */}
+              <div className="flex-shrink-0 flex items-center">
+                <Link to="/" className="flex items-center space-x-2">
+                  <PencilRuler className="h-8 w-8 text-red-600" />
+                  <span className="hidden md:block text-xl font-bold text-gray-900">
+                    StationeryShop
+                  </span>
+                </Link>
+              </div>
+
+              {/* Desktop Navigation */}
+              <div className="hidden md:flex items-center space-x-8">
+                {navigationItems.map((item) => (
+                  <Link
+                    key={item.key}
+                    to={item.key}
+                    className={`text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium ${
+                      location.pathname === item.key ? "text-red-600" : ""
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Desktop Right Section */}
+              <div className="hidden md:flex items-center space-x-4">
+                <Link to="/cart" className="relative p-2 hover:text-red-600">
+                  <ShoppingCart className="h-6 w-6" />
+                  {cartItems?.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </Link>
+
+                <Dropdown
+                  overlay={userMenu}
+                  placement="bottomRight"
+                  trigger={["click"]}
+                >
+                  <Button
+                    type="text"
+                    className="flex items-center hover:text-red-600"
+                    icon={<User className="h-6 w-6" />}
+                  />
+                </Dropdown>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="md:hidden flex items-center space-x-4">
+                <Link to="/cart" className="relative p-2">
+                  <ShoppingCart className="h-6 w-6" />
+                  {cartItems?.length > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                      {cartItems.length}
+                    </span>
+                  )}
+                </Link>
+                <Button
+                  type="text"
+                  icon={<MenuIcon className="h-6 w-6" />}
+                  onClick={() => setDrawerOpen(true)}
+                />
+              </div>
             </div>
           </div>
-          <div className="flex items-center">
-            <Link to="/cart" className="relative p-2">
-              <ShoppingCart className="h-6 w-6 text-gray-600" />
-              {localCart?.length > 0 && (
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-indigo-600 rounded-full">
-                  {localCart?.length}
-                </span>
-              )}
-            </Link>
-            <Dropdown overlay={userMenu} placement="bottomRight">
-              <Button
-                type="text"
-                className="flex items-center ml-4"
-                icon={<User className="h-5 w-5" />}
-              />
-            </Dropdown>
-          </div>
-        </div>
-      </div>
-    </nav>
+
+          {/* Mobile Drawer */}
+          <Drawer
+            title={
+              <div className="flex items-center space-x-2">
+                <PencilRuler className="h-6 w-6 text-red-600" />
+                <span className="font-bold text-lg">StationeryShop</span>
+              </div>
+            }
+            placement="left"
+            onClose={() => setDrawerOpen(false)}
+            open={drawerOpen}
+            width={280}
+          >
+            {drawerContent}
+          </Drawer>
+        </nav>
+        {/* Spacer for fixed navbar */}
+        <div className="h-16" />
+      </ConfigProvider>
+    </div>
   );
 };
 

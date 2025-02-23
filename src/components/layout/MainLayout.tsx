@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout as AntLayout, ConfigProvider } from "antd";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../common/Navbar";
 import Footer from "../common/Footer";
 
@@ -17,10 +17,15 @@ const MainLayout: React.FC = () => {
         },
       }}
     >
-      <AntLayout className="min-h-screen flex flex-col">
+      <AntLayout style={{ height: "100vh", position: "sticky", top: 0, left: 0 }}>
         <Navbar />
-        <Content className="flex-grow">
-          <Outlet />
+        <Content>
+          {/* {!isDashboardRoute && <Navbar />} */}
+          <div
+            className="min-h-screen"
+          >
+            <Outlet />
+          </div>
         </Content>
         <Footer />
       </AntLayout>

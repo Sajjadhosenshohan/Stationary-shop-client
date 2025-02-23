@@ -374,8 +374,8 @@ export function ProfilePage() {
         },
       }}
     >
-      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <Card className="max-w-2xl mx-auto">
+      <div className="min-h-screen max-w-4xl mx-auto bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <Card className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
             <Title level={2} className="mb-6">
               Profile Settings

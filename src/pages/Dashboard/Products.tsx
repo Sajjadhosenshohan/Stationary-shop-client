@@ -16,6 +16,7 @@ import PHTextArea from "../../components/form/PHTextArea";
 import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/auth/authSlice";
 import axios from "axios";
+import { category } from "../../constants/global";
 
 const Products: React.FC = () => {
   const [addProduct] = useAddProductMutation();
@@ -26,15 +27,10 @@ const Products: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [editingProduct, setEditingProduct] = useState<any>(null);
-  const [products, setProducts] = useState<any[]>([]); // State to hold products
   const currentUser = useAppSelector(useCurrentUser);
   const Products = response?.data?.result;
 
-  const category = [
-    { label: "Pen", value: "pen" },
-    { label: "Book", value: "book" },
-    { label: "Notes", value: "notes" },
-  ];
+  console.log(currentUser, "currentUser")
 
   const handleImageChange = (info: any) => {
     setImageFile(info.file);
@@ -80,7 +76,9 @@ const Products: React.FC = () => {
         console.log(update, "update");
         toast.success("Product updated successfully", { id: toastId });
       } else {
-        await addProduct(productData);
+        console.log(productData, 79)
+        const add = await addProduct(productData);
+        console.log(add, 80)
         toast.success("Product created successfully", { id: toastId });
       }
 
@@ -120,7 +118,7 @@ const Products: React.FC = () => {
     { title: "Title", dataIndex: "title" },
     { title: "Price", dataIndex: "price" },
     { title: "Category", dataIndex: "category" },
-    { title: "Number of Books", dataIndex: "numberOfBooks" },
+    { title: "Number of Books", dataIndex: "numberOfProduct" },
     {
       title: "Actions",
       render: (product: any) => (
@@ -136,20 +134,6 @@ const Products: React.FC = () => {
     },
   ];
 
-  // useEffect(() => {
-  //   // Fetch products from API or store them
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:5000/api/v1/product/"); // Replace with your API call
-  //       console.log('useEffect', response)
-  //       setProducts(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching products:", error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
 
   return (
     <div>
@@ -181,8 +165,8 @@ const Products: React.FC = () => {
           />
           <PHInput
             type="number"
-            name="numberOfBooks"
-            label="Number Of Books"
+            name="numberOfProduct"
+            label="Number Of Product"
             defaultValue={editingProduct?.numberOfBooks}
           />
           <PHInput

@@ -8,3 +8,20 @@
     { value: "canceled", label: "Canceled" },
   ];
   
+  export const category = [
+    { label: "All", value: "all" },
+    { label: "writing", value: "writing" },
+    { label: "paper", value: "paper" },
+    { label: "art supplies", value: "art supplies" },
+    { label: "office supplies", value: "office supplies" },
+    { label: "school supplies", value: "school supplies" },
+  ];
+
+  export const allProductsCategories = [
+    "all",
+    "writing",
+    "paper",
+    "art supplies",
+    "office supplies",
+    "school supplies",
+  ];

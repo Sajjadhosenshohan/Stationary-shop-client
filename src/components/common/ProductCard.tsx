@@ -31,6 +31,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     >
       <div className="flex-grow">
         <h3 className="text-lg font-semibold mb-2">{product?.title}</h3>
+        <h3 className="text-lg font-semibold mb-2">{product?.authorName}</h3>
+        <h3 className="text-lg font-semibold mb-2">{product?.category}</h3>
         <p className="text-gray-600 mb-2 line-clamp-2">{product?.description}</p>
         <div className="flex justify-between items-center mt-4">
           <span className="text-xl font-bold text-indigo-600">

@@ -11,7 +11,7 @@ import { useGetAllProductDataQuery } from "../redux/Features/productManagement/p
 const Home: React.FC = () => {
   const { data: res, isLoading } = useGetAllProductDataQuery({ limit: 6 });
   const products = res?.data?.result;
-  console.log(products, "home");
+
   const carouselItems = [
     {
       title: "Back to School Sale",

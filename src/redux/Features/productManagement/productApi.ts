@@ -11,14 +11,25 @@ const productApi = baseApi.injectEndpoints({
       invalidatesTags: ["products"],
     }),
     getAllProductData: builder.query({
-      query: () => ({
-        url: "/product/",
-      }),
+      query: (args) => {
+        const params = new URLSearchParams();
+        if (args) {
+          args.forEach((item: any) => {
+            params.append(item.name, item.value);
+          });
+        }
+    
+        return {
+          url: "/product/",
+          params: params,
+        };
+      },
       providesTags: ["products"],
     }),
+    
     getAProductData: builder.query({
       query: (productId) => {
-        console.log(productId, "in api")
+        console.log(productId, "in api");
         return {
           url: `/product/${productId}`,
         };
