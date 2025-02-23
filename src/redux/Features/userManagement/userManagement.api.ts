@@ -39,6 +39,25 @@ const userManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["users"],
     }),
+
+    // profile management
+
+    getProfileData: builder.query({
+      query: (email) => ({
+        url: `/auth/get-single-user/${email}`,
+      }),
+      
+      providesTags: ["singleUser"],
+    }),
+    updateProfile: builder.mutation({
+      query: (userInfo) => {
+        return {
+        url: "/auth/update-profile-data",
+        method: "PUT",
+        body: userInfo,
+      }},
+      invalidatesTags: ["singleUser"],
+    }),
   }),
 });
 
@@ -47,4 +66,7 @@ export const {
   useActivateAccountMutation,
   useChangeRoleMutation,
   useDeactivateAccountMutation,
+
+  useGetProfileDataQuery,
+  useUpdateProfileMutation
 } = userManagementApi;

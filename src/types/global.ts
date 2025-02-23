@@ -99,3 +99,28 @@ export type TOrder = {
   isDeleted: true;
   userInfo: TUserInfo;
 }
+
+
+export interface Profile {
+  id: string;
+  name: string | null;
+  image_url: string | null;
+  present_address: string | null;
+  city: string | null;
+  updated_at: string;
+}
+
+export interface ProfileFormData {
+  name: string;
+  image_url: string;
+  present_address: string;
+  city: string;
+}
+
+export interface UserInfo {
+  name: string;
+  email: string;
+  role: "user" | "admin";
+  iat: number;
+  exp: number;
+}
