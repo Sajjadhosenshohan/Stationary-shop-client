@@ -18,7 +18,7 @@ const productApi = baseApi.injectEndpoints({
             params.append(item.name, item.value);
           });
         }
-    
+    console.log(args)
         return {
           url: "/product/",
           params: params,

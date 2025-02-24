@@ -1,7 +1,8 @@
-import React from "react";
-import { Layout, Menu } from "antd";
+import React, { useState } from "react";
+import { Layout, Menu, Button } from "antd";
 import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 import {
   ShoppingBag,
   Package,
@@ -11,7 +12,9 @@ import {
   Heart,
   CreditCard,
   UsersIcon,
+  X,
 } from "lucide-react";
+import { MenuOutlined } from "@ant-design/icons";
 import Overview from "./Overview";
 import Orders from "./Orders";
 import Products from "./Products";
@@ -19,7 +22,6 @@ import Wishlist from "./Wishlist";
 import PaymentMethods from "./PaymentMethods";
 import OrderHistory from "./OrderHistory";
 import Users from "./Users";
-import { RootState } from "../../redux/store";
 import { ProfilePage } from "../profile";
 
 const { Sider, Content } = Layout;
@@ -27,36 +29,112 @@ const { Sider, Content } = Layout;
 const Dashboard: React.FC = () => {
   const location = useLocation();
   const { user } = useSelector((state: RootState) => state.auth);
+  const [collapsed, setCollapsed] = useState(true);
 
   const adminMenuItems = [
-    { key: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, label: "Overview", path: "/dashboard" },
-    { key: "/dashboard/orders", icon: <ShoppingBag className="h-5 w-5" />, label: "Orders", path: "/dashboard/orders" },
-    { key: "/dashboard/products", icon: <Package className="h-5 w-5" />, label: "Products", path: "/dashboard/products" },
-    { key: "/dashboard/users", icon: <UsersIcon className="h-5 w-5" />, label: "Users", path: "/dashboard/users" },
-    { key: "/dashboard/settings", icon: <Settings className="h-5 w-5" />, label: "Settings", path: "/dashboard/settings" },
-    { key: "/dashboard/update-profile", icon: <UsersIcon className="h-5 w-5" />, label: "Profile", path: "/dashboard/update-profile" },
+    {
+      key: "/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      label: "Overview",
+      path: "/dashboard",
+    },
+    {
+      key: "/dashboard/orders",
+      icon: <ShoppingBag className="h-5 w-5" />,
+      label: "Orders",
+      path: "/dashboard/orders",
+    },
+    {
+      key: "/dashboard/products",
+      icon: <Package className="h-5 w-5" />,
+      label: "Products",
+      path: "/dashboard/products",
+    },
+    {
+      key: "/dashboard/users",
+      icon: <UsersIcon className="h-5 w-5" />,
+      label: "Users",
+      path: "/dashboard/users",
+    },
+    {
+      key: "/dashboard/settings",
+      icon: <Settings className="h-5 w-5" />,
+      label: "Settings",
+      path: "/dashboard/settings",
+    },
+    {
+      key: "/dashboard/update-profile",
+      icon: <UsersIcon className="h-5 w-5" />,
+      label: "Profile",
+      path: "/dashboard/update-profile",
+    },
   ];
 
   const userMenuItems = [
-    { key: "/dashboard", icon: <LayoutDashboard className="h-5 w-5" />, label: "Overview", path: "/dashboard" },
-    { key: "/dashboard/order-history", icon: <FileText className="h-5 w-5" />, label: "Order History", path: "/dashboard/order-history" },
-    { key: "/dashboard/wishlist", icon: <Heart className="h-5 w-5" />, label: "Wishlist", path: "/dashboard/wishlist" },
-    { key: "/dashboard/payment-methods", icon: <CreditCard className="h-5 w-5" />, label: "Payment Methods", path: "/dashboard/payment-methods" },
-    { key: "/dashboard/settings", icon: <Settings className="h-5 w-5" />, label: "Settings", path: "/dashboard/settings" },
-    { key: "/dashboard/update-profile", icon: <UsersIcon className="h-5 w-5" />, label: "Profile", path: "/dashboard/update-profile" },
+    {
+      key: "/dashboard",
+      icon: <LayoutDashboard className="h-5 w-5" />,
+      label: "Overview",
+      path: "/dashboard",
+    },
+    {
+      key: "/dashboard/order-history",
+      icon: <FileText className="h-5 w-5" />,
+      label: "Order History",
+      path: "/dashboard/order-history",
+    },
+    {
+      key: "/dashboard/wishlist",
+      icon: <Heart className="h-5 w-5" />,
+      label: "Wishlist",
+      path: "/dashboard/wishlist",
+    },
+    {
+      key: "/dashboard/payment-methods",
+      icon: <CreditCard className="h-5 w-5" />,
+      label: "Payment Methods",
+      path: "/dashboard/payment-methods",
+    },
+    {
+      key: "/dashboard/settings",
+      icon: <Settings className="h-5 w-5" />,
+      label: "Settings",
+      path: "/dashboard/settings",
+    },
+    {
+      key: "/dashboard/update-profile",
+      icon: <UsersIcon className="h-5 w-5" />,
+      label: "Profile",
+      path: "/dashboard/update-profile",
+    },
   ];
 
   const menuItems = user?.role === "user" ? userMenuItems : adminMenuItems;
 
   return (
-    <Layout className="h-screen overflow-hidden">
-      {/* Sidebar with 100vh height */}
+    <Layout className="min-h-screen">
+      {collapsed && (
+        <div className="md:hidden fixed top-4 left-4 z-50">
+          <Button
+            icon={<MenuOutlined />}
+            onClick={() => setCollapsed(!collapsed)}
+          />
+        </div>
+      )}
       <Sider
         theme="light"
-        className="border-r border-gray-200 h-screen overflow-auto"
-        width={250}
-        style={{ background: "#fff" }}
+        className={`border-r border-gray-200 ${
+          collapsed ? "hidden" : "block"
+        } md:block  relative md:relative z-40`}
+        width={300}
+        style={{ background: "#fff", height: "100vh", overflowY: "auto" }}
       >
+        <div className="absolute top-6 right-2 z-50 rounded-full p-1 border border-red-500" onClick={() => setCollapsed(!collapsed)}>
+          
+            <X className="text-red-500"/>
+            
+          
+        </div>
         <div className="p-4">
           <h2 className="text-xl font-bold text-gray-800">
             {user?.role === "admin" ? "Admin Dashboard" : "My Account"}
@@ -72,10 +150,11 @@ const Dashboard: React.FC = () => {
           }))}
         />
       </Sider>
-
-      {/* Content Section - min-h-screen + overflow auto for scrolling */}
-      <Layout className="h-screen">
-        <Content className="p-6 overflow-auto bg-gray-50" style={{ minHeight: "100vh" }}>
+      <Layout>
+        <Content
+          className="p-6 overflow-auto bg-gray-50"
+          style={{ minHeight: "100vh" }}
+        >
           <Routes>
             <Route path="/" element={<Overview />} />
             <Route path="/update-profile" element={<ProfilePage />} />

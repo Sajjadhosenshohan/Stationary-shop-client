@@ -1,7 +1,6 @@
-import React from 'react';
-import { Table, Tag, Button, Space, Select, Tooltip } from 'antd';
-import { Mail, UserCog, Shield, Ban, CheckCircle } from 'lucide-react';
-
+import React from "react";
+import { Table, Tag, Button, Space, Select, Tooltip } from "antd";
+import { Mail, UserCog, Shield, Ban, CheckCircle, Divide } from "lucide-react";
 
 interface User {
   _id: string;
@@ -27,16 +26,15 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
   onRoleChange,
 }) => {
   const roleOptions = [
-    { value: 'user', label: 'User' },
-    { value: 'admin', label: 'Admin' },
-    { value: 'moderator', label: 'Moderator' },
+    { value: "user", label: "User" },
+    { value: "admin", label: "Admin" },
   ];
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
       render: (name: string) => (
         <div className="flex items-center gap-2">
           <UserCog className="h-4 w-4 text-gray-500" />
@@ -45,9 +43,9 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
       ),
     },
     {
-      title: 'Email',
-      dataIndex: 'email',
-      key: 'email',
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
       render: (email: string) => (
         <div className="flex items-center gap-2">
           <Mail className="h-4 w-4 text-gray-500" />
@@ -56,12 +54,12 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
       ),
     },
     {
-      title: 'Role',
-      dataIndex: 'role',
-      key: 'role',
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
       render: (role: string, record: User) => (
         <div className="flex items-center gap-2">
-          <Shield className="h-4 w-4 text-gray-500" />
+          <Shield className="h-4 w-4 text-green-400" />
           <Select
             value={role}
             style={{ width: 120 }}
@@ -73,22 +71,32 @@ const UserManagementTable: React.FC<UserManagementTableProps> = ({
       ),
     },
     {
-      title: 'Status',
-      dataIndex: 'isBlocked',
-      key: 'isBlocked',
+      title: "Status",
+      dataIndex: "isBlocked",
+      key: "isBlocked",
       render: (isBlocked: boolean) => (
-        <Tag 
-          icon={isBlocked ? <Ban className="h-3 w-3" /> : <CheckCircle className="h-3 w-3" />}
-          color={isBlocked ? 'error' : 'success'}
+        <Tag
+          icon={
+            isBlocked ? (
+              <div className="grid place-content-center">
+                <Ban className="h-3 w-3" />
+              </div>
+            ) : (
+              <div className="grid place-content-center">
+                <CheckCircle className="h-3 w-3" />
+              </div>
+            )
+          }
+          color={isBlocked ? "error" : "success"}
           className="flex items-center gap-1 w-fit"
         >
-          {isBlocked ? 'Blocked' : 'Active'}
+          {isBlocked ? "Blocked" : "Active"}
         </Tag>
       ),
     },
     {
-      title: 'Actions',
-      key: 'actions',
+      title: "Actions",
+      key: "actions",
       render: (_: unknown, record: User) => (
         <Space>
           {record.isBlocked ? (

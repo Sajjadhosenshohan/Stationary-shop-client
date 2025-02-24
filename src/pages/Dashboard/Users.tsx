@@ -46,13 +46,6 @@ const Users: React.FC = () => {
       toast.error("Failed to change role");
     }
   };
-  // email: "mdshohansajjad@gmail.com";
-  // imageUrl: "sdjhfshjfh";
-  // isBlocked: false;
-  // name: "shohan";
-  // role: "user";
-  // _id: "67b609a48bbb0de75472e2d5";
-  console.log(response?.data);
   return (
     // <div className="min-h-screen bg-gray-50 p-6">
     //   <div className="max-w-7xl mx-auto">

@@ -181,7 +181,7 @@ const OrderHistory: React.FC = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Order History</h1>
-      <Card className="shadow-sm">
+      <Card className="shadow-sm overflow-auto">
         <Table
           columns={columns}
           dataSource={orders}

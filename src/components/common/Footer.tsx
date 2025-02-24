@@ -1,12 +1,10 @@
 import React from 'react';
-import { Layout } from 'antd';
 import { Facebook, Twitter, Instagram, Mail, Phone } from 'lucide-react';
 
-const { Footer: AntFooter } = Layout;
 
 const Footer: React.FC = () => {
   return (
-    <AntFooter className="bg-gray-900 text-white">
+    <div className='bg-white'>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
@@ -77,7 +75,7 @@ const Footer: React.FC = () => {
           <p>&copy; 2024 StationeryShop. All rights reserved.</p>
         </div>
       </div>
-    </AntFooter>
+    </div>
   );
 };
 

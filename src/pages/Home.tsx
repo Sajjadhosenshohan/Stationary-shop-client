@@ -4,13 +4,20 @@ import { ArrowRight, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
 import { useGetAllProductDataQuery } from "../redux/Features/productManagement/productApi";
+import { TOrderProduct } from "../types";
+import WhyChooseUs from "../components/Home/WhyChooseUs";
+import Blog from "../components/Home/Blog";
 
 // import { useGetProductsQuery } from '../store/api';
 // import ProductCard from '../components/ProductCard';
 
 const Home: React.FC = () => {
-  const { data: res, isLoading } = useGetAllProductDataQuery({ limit: 6 });
+  const { data: res, isLoading } = useGetAllProductDataQuery([
+    { name: "limit", value: "6" },
+  ]);
+
   const products = res?.data?.result;
+  console.log(products);
 
   const carouselItems = [
     {
@@ -56,7 +63,8 @@ const Home: React.FC = () => {
         ))}
       </Carousel>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* features product */}
         <section className="mb-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold">Featured Products</h2>
@@ -70,46 +78,15 @@ const Home: React.FC = () => {
             {isLoading ? (
               <Card loading />
             ) : (
-              products?.map((product) => (
-                <ProductCard key={product?.id} product={product} />
+              products?.map((product: TOrderProduct) => (
+                <ProductCard key={product?._id} product={product} />
               ))
             )}
           </div>
         </section>
 
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-8">Why Choose Us</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Quality Products</h3>
-              <p className="text-gray-600">
-                We source only the finest stationery products from trusted
-                brands.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Fast Shipping</h3>
-              <p className="text-gray-600">
-                Quick and reliable delivery to your doorstep.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="bg-indigo-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-8 w-8 text-indigo-600" />
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Customer Support</h3>
-              <p className="text-gray-600">
-                Dedicated support team to assist you with any queries.
-              </p>
-            </div>
-          </div>
-        </section>
+        <WhyChooseUs />
+        <Blog/>
       </div>
     </div>
   );

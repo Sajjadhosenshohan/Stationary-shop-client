@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Modal, Button, Table, Form, Upload } from "antd";
+import React, { useState } from "react";
+import { Modal, Button, Table, Form, Upload, Tag } from "antd";
 import { PlusCircle, UploadIcon } from "lucide-react";
 import PHForm from "../../components/form/PHForm";
 import PHInput from "../../components/form/PHInput";
 import PHSelect from "../../components/form/PHSelect";
+import PHTextArea from "../../components/form/PHTextArea";
 import { toast } from "sonner";
 import { FieldValues } from "react-hook-form";
 import {
@@ -12,7 +13,6 @@ import {
   useDeleteProductMutation,
   useGetAllProductDataQuery,
 } from "../../redux/Features/productManagement/productApi";
-import PHTextArea from "../../components/form/PHTextArea";
 import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/auth/authSlice";
 import axios from "axios";
@@ -21,21 +21,17 @@ import { category } from "../../constants/global";
 const Products: React.FC = () => {
   const [addProduct] = useAddProductMutation();
   const { data: response, isFetching } = useGetAllProductDataQuery(undefined);
-
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const currentUser = useAppSelector(useCurrentUser);
-  const Products = response?.data?.result;
-
-  console.log(currentUser, "currentUser")
+  const products = response?.data?.result;
 
   const handleImageChange = (info: any) => {
     setImageFile(info.file);
   };
-  console.log(Products, 18);
 
   const handleSubmit = async (data: FieldValues) => {
     const toastId = toast.loading(
@@ -43,13 +39,11 @@ const Products: React.FC = () => {
     );
     try {
       let imageUrl = editingProduct?.imageUrl || "";
-
       if (imageFile) {
         const formData = new FormData();
         formData.append("file", imageFile);
         formData.append("upload_preset", "mern_product");
         formData.append("cloud_name", "djzt5tkwu");
-
         const response = await axios.post(
           "https://api.cloudinary.com/v1_1/djzt5tkwu/image/upload",
           formData
@@ -67,23 +61,18 @@ const Products: React.FC = () => {
       };
 
       if (editingProduct) {
-        const update = await updateProduct({
+        await updateProduct({
           productId: editingProduct._id,
-          productInfo: {
-            ...productData,
-          },
+          productInfo: productData,
         });
-        console.log(update, "update");
         toast.success("Product updated successfully", { id: toastId });
       } else {
-        console.log(productData, 79)
-        const add = await addProduct(productData);
-        console.log(add, 80)
+        await addProduct(productData);
         toast.success("Product created successfully", { id: toastId });
       }
 
       setIsModalVisible(false);
-      setEditingProduct(null); // Reset editing state
+      setEditingProduct(null);
     } catch (err) {
       console.error("Error:", err);
       toast.error("Something went wrong", { id: toastId });
@@ -92,9 +81,7 @@ const Products: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await deleteProduct(id);
-      console.log("handle deleted", res)
-      // setProducts(products.filter((product) => product._id !== id)); // Remove from local state
+      await deleteProduct(id);
       toast.success("Product deleted successfully");
     } catch (err) {
       console.error("Error deleting product:", err);
@@ -116,28 +103,41 @@ const Products: React.FC = () => {
       ),
     },
     { title: "Title", dataIndex: "title" },
-    { title: "Price", dataIndex: "price" },
+    {
+      title: "Price",
+      dataIndex: "price",
+      render: (price: any) => <Tag color="green">{price}</Tag>,
+    },
     { title: "Category", dataIndex: "category" },
-    { title: "Number of Books", dataIndex: "numberOfProduct" },
+    {
+      title: "Number of Books",
+      dataIndex: "numberOfProduct",
+      render: (numberOfProduct: any) => (
+        <Tag color="blue">{numberOfProduct}</Tag>
+      ),
+    },
     {
       title: "Actions",
       render: (product: any) => (
-        <>
-          <Button type="link" onClick={() => handleEdit(product)}>
+        <div className="flex gap-5">
+          <Button
+            color="green"
+            variant="outlined"
+            onClick={() => handleEdit(product)}
+          >
             Update
           </Button>
-          <Button type="link" danger onClick={() => handleDelete(product._id)}>
+          <Button danger onClick={() => handleDelete(product._id)}>
             Delete
           </Button>
-        </>
+        </div>
       ),
     },
   ];
 
-
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
+    <div className="overflow-x-auto">
+      <div className="flex justify-between items-center my-12">
         <h1 className="text-2xl font-bold">Products</h1>
         <Button
           type="primary"
@@ -147,9 +147,15 @@ const Products: React.FC = () => {
           Add Product
         </Button>
       </div>
-
-      <Table columns={columns} dataSource={Products} rowKey="_id" />
-
+      <div className="w-full overflow-x-auto  bg-white">
+        <Table
+          columns={columns}
+          dataSource={products}
+          rowKey="_id"
+          loading={isFetching}
+          scroll={{ x: "max-content" }} // Enables horizontal scrolling on small screens
+        />
+      </div>
       <Modal
         title={editingProduct ? "Update Product" : "Add Product"}
         open={isModalVisible}
@@ -167,7 +173,7 @@ const Products: React.FC = () => {
             type="number"
             name="numberOfProduct"
             label="Number Of Product"
-            defaultValue={editingProduct?.numberOfBooks}
+            defaultValue={editingProduct?.numberOfProduct}
           />
           <PHInput
             type="number"
@@ -199,7 +205,6 @@ const Products: React.FC = () => {
               </div>
             </Upload>
           </Form.Item>
-
           <Button type="primary" htmlType="submit" block>
             {editingProduct ? "Update Product" : "Save Product"}
           </Button>

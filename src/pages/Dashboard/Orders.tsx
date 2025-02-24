@@ -9,7 +9,7 @@ import {
 } from "../../redux/Features/OrderManagement/orderApi";
 import { toast } from "sonner";
 import { TOrder } from "../../types";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Divide } from "lucide-react";
 import { orderStatusOptions } from "../../constants/global";
 
 const Orders: React.FC = () => {
@@ -56,22 +56,21 @@ const Orders: React.FC = () => {
     }
   };
 
+  // Function to handle updating the order status
+  const handleOrderStatus = async (id: string, newStatus: string) => {
+    const updateInfo = {
+      id,
+      orderStatus: newStatus, // new order status
+    };
 
-// Function to handle updating the order status
-const handleOrderStatus = async (id: string, newStatus: string) => {
-  const updateInfo = {
-    id,
-    orderStatus: newStatus, // new order status
+    try {
+      // Assuming `updateOrderStatus` is a function that makes an API call to update the status
+      const result = await changeOrderStatus(updateInfo).unwrap();
+      toast.success(result.message); // Show success toast message
+    } catch (error) {
+      toast.error("Something Went Wrong"); // Show error toast message
+    }
   };
-
-  try {
-    // Assuming `updateOrderStatus` is a function that makes an API call to update the status
-    const result = await changeOrderStatus(updateInfo).unwrap();
-    toast.success(result.message); // Show success toast message
-  } catch (error) {
-    toast.error("Something Went Wrong"); // Show error toast message
-  }
-};
 
   const expandedRowRender = (record: TOrder) => {
     const productColumns = [
@@ -105,11 +104,19 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
         ),
       },
       {
-        title: "Quantity",
-        dataIndex: "numberOfProduct",
-        key: "numberOfProduct",
+        title: "Author Name",
+        dataIndex: "authorName",
+        key: "authorName",
+        render: (authorName: string) => (
+          <p className="text-gray-600 line-clamp-2">{authorName}</p>
+        ),
+      },
+      {
+        title: "authorEmail",
+        dataIndex: "authorEmail",
+        key: "authorEmail",
         width: 100,
-        render: (quantity: number) => <Tag color="blue">{quantity} items</Tag>,
+        render: (authorEmail: number) => <Tag color="blue">{authorEmail}</Tag>,
       },
       {
         title: "Price",
@@ -117,7 +124,7 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
         key: "price",
         width: 120,
         render: (price: number) => (
-          <span className="font-medium">${Number(price).toFixed(2)}</span>
+          <Tag color="green" className="font-medium">${Number(price).toFixed(2)}</Tag>
         ),
       },
     ];
@@ -156,14 +163,14 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
       dataIndex: "total_order_amount",
       key: "total_order_amount",
       render: (total: number) => (
-        <span className="font-medium">${Number(total).toFixed(2)}</span>
+        <Tag color="green" className="font-medium">${Number(total).toFixed(2)}</Tag>
       ),
     },
     {
       title: "Manage order",
       key: "action",
       render: (record: TOrder) => (
-        <div>
+        <div className="flex gap-5">
           {/* Select Dropdown for changing order status */}
           <Select
             defaultValue={record.orderStatus} // Display current status as default
@@ -171,7 +178,7 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
             onChange={(value) => handleOrderStatus(record._id, value)} // Call function on status change
             options={orderStatusOptions} // Provide options for statuses
           />
-    
+
           {/* Additional buttons for delete or other actions */}
           <Tooltip title="Delete Order">
             <Button
@@ -184,14 +191,14 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
           </Tooltip>
         </div>
       ),
-    }
-    
+    },
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Order History</h1>
-      <Card className="shadow-sm">
+    <div className="overflow-x-auto">
+      <h1 className="text-2xl font-bold my-12">Order History</h1>
+
+      <div className="w-full overflow-x-auto  bg-white">
         <Table
           columns={columns}
           dataSource={orders}
@@ -203,24 +210,24 @@ const handleOrderStatus = async (id: string, newStatus: string) => {
             defaultExpandedRowKeys: ["0"],
             expandIcon: ({ expanded, onExpand, record }) =>
               expanded ? (
-                <Button
-                  className="text-red-500  p-3"
-                  type="text"
+                <div
+                  className="p-3"
                   onClick={(e) => onExpand(record, e)}
-                  icon={<ChevronDown className="h-4 w-4" />}
-                />
+                >
+                  <ChevronRight className="h-10 animate-bounce w-10 text-red-500" />
+                </div>
               ) : (
-                <Button
-                  type="text"
-                  className="text-red-500 p-3"
+                <div
+                  className="p-3"
                   onClick={(e) => onExpand(record, e)}
-                  icon={<ChevronRight className="h-4 w-4" />}
-                />
+                >
+                  <ChevronDown className="h-10 animate-bounce w-10 text-red-500" />
+                </div>
               ),
           }}
           className="orders-table"
         />
-      </Card>
+      </div>
 
       <Modal
         title="Basic Modal"

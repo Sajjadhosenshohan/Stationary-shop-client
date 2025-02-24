@@ -3,11 +3,11 @@ import MainLayout from "../components/layout/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Cart from "../pages/Cart";
-import Products from "../pages/Products";
 import Dashboard from "../pages/Dashboard";
 import ProductDetails from "../pages/ProductDetails";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import { PaymentFailed } from "../pages/payment/PaymentFailed";
+import AllProducts from "../pages/AllProducts";
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-        { path: "products", element: <Products /> },
+        { path: "products", element: <AllProducts /> },
         { path: "products/:id", element: <ProductDetails /> },
         { path: "/payment-successful/:transactionId", element: <PaymentSuccess /> },
         { path: "/payment-failed/:transactionId", element: <PaymentFailed /> },

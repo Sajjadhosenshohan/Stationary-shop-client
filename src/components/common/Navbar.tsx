@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import { Button, Menu, Dropdown, Drawer, ConfigProvider, theme } from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -172,7 +172,7 @@ const Navbar: React.FC = () => {
   );
 
   return (
-    <div className={` ${isDashboardRoute ? "hidden" : "block"}`}>
+    <div className={` ${isDashboardRoute ? "hidden" : "block"} bg-white`}>
       <ConfigProvider
         theme={{
           algorithm: theme.defaultAlgorithm,
@@ -182,37 +182,36 @@ const Navbar: React.FC = () => {
         }}
       >
         <nav
-          className={` ${
-            isDashboardRoute ? "hidden" : "block"
-          }bg-white shadow-md fixed w-full top-0 z-50`}
+          className={`shadow-md fixed w-full top-0 left-0 right-0 bg-white z-50`}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center">
-                <Link to="/" className="flex items-center space-x-2">
-                  <PencilRuler className="h-8 w-8 text-red-600" />
+                <Link to="/" className="flex items-center h-16 w-20">
+                  {/* <PencilRuler className="h-8 w-8 text-red-600" />
                   <span className="hidden md:block text-xl font-bold text-gray-900">
                     StationeryShop
-                  </span>
+                  </span> */}
+                  <img src="logo.png" className="w-full h-full"></img>
                 </Link>
               </div>
-
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-8">
                 {navigationItems.map((item) => (
-                  <Link
+                  <NavLink
                     key={item.key}
                     to={item.key}
-                    className={`text-gray-900 hover:text-red-600 px-3 py-2 text-sm font-medium ${
-                      location.pathname === item.key ? "text-red-600" : ""
-                    }`}
+                    className={({ isActive }) =>
+                      `px-3 py-2 text-sm font-medium ${
+                        isActive ? "text-red-500" : "text-gray-500"
+                      }`
+                    }
                   >
                     {item.label}
-                  </Link>
+                  </NavLink>
                 ))}
               </div>
-
               {/* Desktop Right Section */}
               <div className="hidden md:flex items-center space-x-4">
                 <Link to="/cart" className="relative p-2 hover:text-red-600">
@@ -236,7 +235,6 @@ const Navbar: React.FC = () => {
                   />
                 </Dropdown>
               </div>
-
               {/* Mobile Menu Button */}
               <div className="md:hidden flex items-center space-x-4">
                 <Link to="/cart" className="relative p-2">
