@@ -34,10 +34,12 @@ const Navbar: React.FC = () => {
     setDrawerOpen(false);
   };
 
+  const roleBaseRoute = user?.role === "admin" ? "/dashboard/admin-dashboard-overview" : "/dashboard/user-dashboard-overview"
+
   const navigationItems = [
     { key: "/", label: "Home", icon: <Home className="h-5 w-5" /> },
     {
-      key: "/dashboard",
+      key: roleBaseRoute,
       label: "Dashboard",
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
@@ -60,7 +62,7 @@ const Navbar: React.FC = () => {
             key="dashboard"
             icon={<LayoutDashboard className="h-4 w-4" />}
           >
-            <Link to="/dashboard">Dashboard</Link>
+            <Link to={roleBaseRoute}>Dashboard</Link>
           </Menu.Item>
           <Menu.Divider />
           <Menu.Item

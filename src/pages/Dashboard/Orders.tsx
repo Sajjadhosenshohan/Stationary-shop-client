@@ -8,7 +8,7 @@ import {
   useGetAdminOrdersDataQuery,
 } from "../../redux/Features/OrderManagement/orderApi";
 import { toast } from "sonner";
-import { TOrder } from "../../types";
+import { TOrder, TUserInfo } from "../../types";
 import { ChevronDown, ChevronRight, Divide } from "lucide-react";
 import { orderStatusOptions } from "../../constants/global";
 
@@ -71,7 +71,6 @@ const Orders: React.FC = () => {
       toast.error("Something Went Wrong"); // Show error toast message
     }
   };
-
   const expandedRowRender = (record: TOrder) => {
     const productColumns = [
       {
@@ -104,19 +103,21 @@ const Orders: React.FC = () => {
         ),
       },
       {
-        title: "Author Name",
-        dataIndex: "authorName",
-        key: "authorName",
-        render: (authorName: string) => (
-          <p className="text-gray-600 line-clamp-2">{authorName}</p>
+        title: "Buyer Name",
+        key: "buyerName",
+        render: (_: any, productRecord: any) => (
+          <span className="text-gray-600">
+            {productRecord.buyerName || "Unknown"}
+          </span>
         ),
       },
       {
-        title: "authorEmail",
-        dataIndex: "authorEmail",
-        key: "authorEmail",
-        width: 100,
-        render: (authorEmail: number) => <Tag color="blue">{authorEmail}</Tag>,
+        title: "Buyer Email",
+        key: "Buyer Email",
+        render: (_:any, productRecord: any) => {
+          console.log(productRecord)
+          return <Tag color="blue">{productRecord.buyerEmail || "Unknown"}</Tag>
+        },
       },
       {
         title: "Price",
@@ -124,17 +125,25 @@ const Orders: React.FC = () => {
         key: "price",
         width: 120,
         render: (price: number) => (
-          <Tag color="green" className="font-medium">${Number(price).toFixed(2)}</Tag>
+          <Tag color="green" className="font-medium">
+            ${Number(price).toFixed(2)}
+          </Tag>
         ),
       },
     ];
+
+    const modifiedProducts = record.products.map((product) => ({
+      ...product,
+      buyerName: record.userInfo.name,
+      buyerEmail: record.userInfo.email
+    }));
 
     return (
       <div className="bg-gray-50 p-4 rounded-lg">
         <h3 className="text-lg font-medium mb-4">Order Products</h3>
         <Table
           columns={productColumns}
-          dataSource={record.products}
+          dataSource={modifiedProducts} // এখানে পরিবর্তিত ডাটা ব্যবহার করছি
           pagination={false}
           rowKey="_id"
           className="nested-table"
@@ -154,16 +163,22 @@ const Orders: React.FC = () => {
     },
     {
       title: "Date",
-      dataIndex: "date",
-      key: "date",
-      render: (date: string) => <span className="text-gray-600">{date}</span>,
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt: string) => (
+        <span className="text-gray-600">
+          {new Date(createdAt).toLocaleDateString()}
+        </span>
+      ),
     },
     {
       title: "Total Amount",
       dataIndex: "total_order_amount",
       key: "total_order_amount",
       render: (total: number) => (
-        <Tag color="green" className="font-medium">${Number(total).toFixed(2)}</Tag>
+        <Tag color="green" className="font-medium">
+          ${Number(total).toFixed(2)}
+        </Tag>
       ),
     },
     {
@@ -210,17 +225,11 @@ const Orders: React.FC = () => {
             defaultExpandedRowKeys: ["0"],
             expandIcon: ({ expanded, onExpand, record }) =>
               expanded ? (
-                <div
-                  className="p-3"
-                  onClick={(e) => onExpand(record, e)}
-                >
+                <div className="p-3" onClick={(e) => onExpand(record, e)}>
                   <ChevronRight className="h-10 animate-bounce w-10 text-red-500" />
                 </div>
               ) : (
-                <div
-                  className="p-3"
-                  onClick={(e) => onExpand(record, e)}
-                >
+                <div className="p-3" onClick={(e) => onExpand(record, e)}>
                   <ChevronDown className="h-10 animate-bounce w-10 text-red-500" />
                 </div>
               ),

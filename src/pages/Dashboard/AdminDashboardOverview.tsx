@@ -1,0 +1,77 @@
+import React from "react";
+import { Card, Row, Col, Statistic } from "antd";
+import { ShoppingBag, Package, DollarSign, TrendingUp } from "lucide-react";
+import { useCurrentUser } from "../../redux/auth/authSlice";
+import { useAppSelector } from "../../redux/hooks";
+import { useGetAdminOrdersDataQuery } from "../../redux/Features/OrderManagement/orderApi";
+import { TOrder } from "../../types";
+
+const AdminDashboardOverview: React.FC = () => {
+  const user = useAppSelector(useCurrentUser);
+  const { data: res, isFetching } = useGetAdminOrdersDataQuery(user?.email, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
+  });
+  const orders = res?.data;
+  const calculateOrderStats = (orders: TOrder[]) => {
+    return orders?.reduce(
+      (acc, order) => {
+        const orderTotal = order?.products?.reduce(
+          (sum, product) => sum + product?.price,
+          0
+        ); // এক অর্ডারের মোট দাম
+
+        acc.totalOrders += 1; // প্রতিটি অর্ডারের জন্য 1 যোগ করা
+        acc.totalProducts += order?.products?.length; // প্রতিটি অর্ডারের সব প্রোডাক্ট গণনা
+        acc.totalRevenue += orderTotal; // মোট আয়
+
+        return acc;
+      },
+      { totalOrders: 0, totalProducts: 0, totalRevenue: 0 } // শুরুতে 0 সেট করে দিলাম
+    );
+  };
+
+  const orderStats = calculateOrderStats(orders);
+  console.log(orderStats);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
+      <Row gutter={[16, 16]}>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Total Orders"
+              value={orderStats?.totalOrders}
+              prefix={<ShoppingBag className="h-5 w-5 text-indigo-600" />}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Total Products"
+              value={orderStats?.totalProducts}
+              prefix={<Package className="h-5 w-5 text-green-600" />}
+            />
+          </Card>
+        </Col>
+        <Col xs={24} sm={12} lg={6}>
+          <Card>
+            <Statistic
+              title="Total Revenue"
+              value={orderStats?.totalRevenue}
+              prefix={<DollarSign className="h-5 w-5 text-blue-600" />}
+            />
+          </Card>
+        </Col>
+        
+      </Row>
+
+      {/* Add more dashboard widgets here */}
+    </div>
+  );
+};
+
+export default AdminDashboardOverview;

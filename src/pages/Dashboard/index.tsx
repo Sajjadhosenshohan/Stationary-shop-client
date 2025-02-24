@@ -15,7 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { MenuOutlined } from "@ant-design/icons";
-import Overview from "./Overview";
+import Overview from "./UserDashboardOverview";
 import Orders from "./Orders";
 import Products from "./Products";
 import Wishlist from "./Wishlist";
@@ -23,6 +23,8 @@ import PaymentMethods from "./PaymentMethods";
 import OrderHistory from "./OrderHistory";
 import Users from "./Users";
 import { ProfilePage } from "../profile";
+import UserDashboardOverview from "./UserDashboardOverview";
+import AdminDashboardOverview from "./AdminDashboardOverview";
 
 const { Sider, Content } = Layout;
 
@@ -33,10 +35,10 @@ const Dashboard: React.FC = () => {
 
   const adminMenuItems = [
     {
-      key: "/dashboard",
+      key: "/dashboard/admin-dashboard-overview",
       icon: <LayoutDashboard className="h-5 w-5" />,
       label: "Overview",
-      path: "/dashboard",
+      path: "/dashboard/admin-dashboard-overview",
     },
     {
       key: "/dashboard/orders",
@@ -57,12 +59,6 @@ const Dashboard: React.FC = () => {
       path: "/dashboard/users",
     },
     {
-      key: "/dashboard/settings",
-      icon: <Settings className="h-5 w-5" />,
-      label: "Settings",
-      path: "/dashboard/settings",
-    },
-    {
       key: "/dashboard/update-profile",
       icon: <UsersIcon className="h-5 w-5" />,
       label: "Profile",
@@ -72,34 +68,16 @@ const Dashboard: React.FC = () => {
 
   const userMenuItems = [
     {
-      key: "/dashboard",
+      key: "/dashboard/user-dashboard-overview",
       icon: <LayoutDashboard className="h-5 w-5" />,
       label: "Overview",
-      path: "/dashboard",
+      path: "/dashboard/user-dashboard-overview",
     },
     {
       key: "/dashboard/order-history",
       icon: <FileText className="h-5 w-5" />,
       label: "Order History",
       path: "/dashboard/order-history",
-    },
-    {
-      key: "/dashboard/wishlist",
-      icon: <Heart className="h-5 w-5" />,
-      label: "Wishlist",
-      path: "/dashboard/wishlist",
-    },
-    {
-      key: "/dashboard/payment-methods",
-      icon: <CreditCard className="h-5 w-5" />,
-      label: "Payment Methods",
-      path: "/dashboard/payment-methods",
-    },
-    {
-      key: "/dashboard/settings",
-      icon: <Settings className="h-5 w-5" />,
-      label: "Settings",
-      path: "/dashboard/settings",
     },
     {
       key: "/dashboard/update-profile",
@@ -129,11 +107,11 @@ const Dashboard: React.FC = () => {
         width={300}
         style={{ background: "#fff", height: "100vh", overflowY: "auto" }}
       >
-        <div className="absolute top-6 right-2 z-50 rounded-full p-1 border border-red-500" onClick={() => setCollapsed(!collapsed)}>
-          
-            <X className="text-red-500"/>
-            
-          
+        <div
+          className="absolute top-6 right-2 z-50 rounded-full p-1 border border-red-500"
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          <X className="text-red-500" />
         </div>
         <div className="p-4">
           <h2 className="text-xl font-bold text-gray-800">
@@ -156,15 +134,15 @@ const Dashboard: React.FC = () => {
           style={{ minHeight: "100vh" }}
         >
           <Routes>
-            <Route path="/" element={<Overview />} />
+            {/* admin route */}
+            <Route path="/admin-dashboard-overview" element={<AdminDashboardOverview />} />
             <Route path="/update-profile" element={<ProfilePage />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/products" element={<Products />} />
             <Route path="/users" element={<Users />} />
+            {/* user route */}
+            <Route path="/user-dashboard-overview" element={<UserDashboardOverview />} />
             <Route path="/order-history" element={<OrderHistory />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/payment-methods" element={<PaymentMethods />} />
-            <Route path="/settings" element={<Settings />} />
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </Content>

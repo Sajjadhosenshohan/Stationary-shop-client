@@ -37,12 +37,10 @@ const OrderHistory: React.FC = () => {
     setIsModalOpen(false);
   };
 
-
   // table related data
   const orders = res?.data?.map((order: TOrder) => ({
     ...order,
     key: order?._id,
-    date: new Date().toLocaleDateString(),
   }));
 
   const handleDeleteOrder = async (orderId: string) => {
@@ -78,6 +76,26 @@ const OrderHistory: React.FC = () => {
         dataIndex: "title",
         key: "title",
         render: (title: string) => <span className="font-medium">{title}</span>,
+      },
+      {
+        title: "Author Name",
+        key: "authorName",
+        dataIndex: "authorName",
+        render: (authorName: string) => (
+          <span className="text-gray-600">
+            {authorName || "Unknown"}
+          </span>
+        ),
+      },
+      {
+        title: "authorEmail",
+        key: "authorEmail",
+        dataIndex: "authorEmail",
+        render: (authorEmail:string) => {
+          return (
+            <Tag color="blue">{authorEmail || "Unknown"}</Tag>
+          );
+        },
       },
       {
         title: "Description",
@@ -119,6 +137,7 @@ const OrderHistory: React.FC = () => {
     );
   };
 
+  console.log(orders, "orders");
   const columns = [
     {
       title: "Transaction Id",
@@ -129,10 +148,10 @@ const OrderHistory: React.FC = () => {
       ),
     },
     {
-      title: "Date",
-      dataIndex: "date",
-      key: "date",
-      render: (date: string) => <span className="text-gray-600">{date}</span>,
+      title: "CreatedAt",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (createdAt: string) => <span className="text-gray-600">{new Date(createdAt).toLocaleDateString()}</span>,
     },
     {
       title: "Total Amount",
@@ -179,9 +198,9 @@ const OrderHistory: React.FC = () => {
   ];
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Order History</h1>
-      <Card className="shadow-sm overflow-auto">
+    <div className="overflow-x-auto">
+      <h1 className="text-2xl font-bold my-12">Order History</h1>
+      <div className="w-full overflow-x-auto  bg-white">
         <Table
           columns={columns}
           dataSource={orders}
@@ -210,7 +229,7 @@ const OrderHistory: React.FC = () => {
           }}
           className="orders-table"
         />
-      </Card>
+      </div>
 
       <Modal
         title="Basic Modal"

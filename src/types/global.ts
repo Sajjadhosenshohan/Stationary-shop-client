@@ -98,6 +98,8 @@ export type TOrder = {
   transactionId: string;
   isDeleted: true;
   userInfo: TUserInfo;
+  updatedAt: string;
+  createdAt: string;
 }
 
 
