@@ -2,13 +2,6 @@ import { baseApi } from "../../api/baseApi";
 
 const userManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    // addProduct: builder.mutation({
-    //   query: (bookInfo) => ({
-    //     url: "/api/product/add-product",
-    //     method: "POST",
-    //     body: bookInfo,
-    //   }),
-    // }),
     getAllUserData: builder.query({
       query: () => ({
         url: "/auth/admin/get-all-user",

@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
       {user ? (
         <>
           <Menu.Item key="profile" icon={<User className="h-4 w-4" />}>
-            <Link to="/profile">Profile</Link>
+            <Link to="/dashboard/update-profile">Profile</Link>
           </Menu.Item>
           <Menu.Item
             key="dashboard"
@@ -195,7 +195,7 @@ const Navbar: React.FC = () => {
                   <span className="hidden md:block text-xl font-bold text-gray-900">
                     StationeryShop
                   </span> */}
-                  <img src="logo.png" className="w-full h-full"></img>
+                  <img src={"https://i.ibb.co.com/0jSQHFxP/logo.png"} className="w-full h-full"></img>
                 </Link>
               </div>
               {/* Desktop Navigation */}

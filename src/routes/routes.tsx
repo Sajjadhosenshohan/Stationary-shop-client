@@ -8,6 +8,9 @@ import ProductDetails from "../pages/ProductDetails";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import { PaymentFailed } from "../pages/payment/PaymentFailed";
 import AllProducts from "../pages/AllProducts";
+import About from "../pages/About";
+import Register from "../pages/Register";
+import NotFound from "../pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -19,10 +22,9 @@ export const router = createBrowserRouter([
         { path: "products/:id", element: <ProductDetails /> },
         { path: "/payment-successful/:transactionId", element: <PaymentSuccess /> },
         { path: "/payment-failed/:transactionId", element: <PaymentFailed /> },
-      //   { path: "about", element: <About /> },
-      //   { path: "contact", element: <Contact /> },
+        { path: "about", element: <About /> },
       { path: "login", element: <Login /> },
-      //   { path: "register", element: <Register /> },
+        { path: "register", element: <Register /> },
         {
           path: "cart",
           element: (
@@ -39,7 +41,7 @@ export const router = createBrowserRouter([
             // </PrivateRoute>
           ),
         },
-        // { path: "*", element: <NotFound /> },
+        { path: "*", element: <NotFound /> },
     ],
   },
 ]);

@@ -21,7 +21,6 @@ import { useAddOrderMutation } from "../redux/Features/OrderManagement/orderApi"
 import { useAppSelector } from "../redux/hooks";
 import { useCurrentUser } from "../redux/auth/authSlice";
 import { toast } from "sonner";
-import { TOrder } from "../types";
 
 const Cart: React.FC = () => {
   const dispatch = useDispatch();
@@ -41,18 +40,8 @@ const Cart: React.FC = () => {
       return navigate("/login");
     }
 
-    // if (bookData.numberOfBooks < 1) {
-    //   return toast.error("Insufficient stock", { duration: 2000 });
-    // }
-
-    // console.log(id);
-    // if (user?.email === bookData?.authorEmail) {
-    //   return toast.error("You cannot buy your own product");
-    // }
-
-    const orderInfo: TOrder = {
+    const orderInfo = {
       products: items,
-      // _id: [...id],
       total_order_amount: total,
       userInfo: {
         ...user,
@@ -60,7 +49,7 @@ const Cart: React.FC = () => {
     };
     console.log(orderInfo);
     const result = await addOrder(orderInfo).unwrap();
-
+    handleClearCart()
     window.location.replace(result.url);
   };
 

@@ -12,3 +12,11 @@
   .nested-table .ant-table-thead > tr > th {
     background-color: #f9fafb;
   }
+
+  .avatar_image {
+    /* border-2 border-dashed border-red-700 rounded-full */
+
+    border: 2px solid red;
+    border-radius: 50%;
+    padding: 4px;
+  }

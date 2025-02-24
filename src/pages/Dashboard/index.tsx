@@ -1,37 +1,39 @@
 import React, { useState } from "react";
-import { Layout, Menu, Button } from "antd";
-import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { Layout, Menu, Button, Avatar, Tag } from "antd";
+import { Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../redux/hooks";
+import { logout, useCurrentUser } from "../../redux/auth/authSlice";
+import { useGetProfileDataQuery } from "../../redux/Features/userManagement/userManagement.api";
 import {
   ShoppingBag,
   Package,
-  Settings,
   LayoutDashboard,
   FileText,
-  Heart,
-  CreditCard,
   UsersIcon,
   X,
+  House,
+  LogOut,
 } from "lucide-react";
-import { MenuOutlined } from "@ant-design/icons";
-import Overview from "./UserDashboardOverview";
+import { MenuOutlined, UserOutlined } from "@ant-design/icons";
 import Orders from "./Orders";
 import Products from "./Products";
-import Wishlist from "./Wishlist";
-import PaymentMethods from "./PaymentMethods";
 import OrderHistory from "./OrderHistory";
 import Users from "./Users";
 import { ProfilePage } from "../profile";
 import UserDashboardOverview from "./UserDashboardOverview";
 import AdminDashboardOverview from "./AdminDashboardOverview";
+import { useDispatch } from "react-redux";
 
 const { Sider, Content } = Layout;
 
 const Dashboard: React.FC = () => {
   const location = useLocation();
-  const { user } = useSelector((state: RootState) => state.auth);
+  const user = useAppSelector(useCurrentUser);
   const [collapsed, setCollapsed] = useState(true);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { data: res, isFetching } = useGetProfileDataQuery(user?.email);
 
   const adminMenuItems = [
     {
@@ -88,6 +90,12 @@ const Dashboard: React.FC = () => {
   ];
 
   const menuItems = user?.role === "user" ? userMenuItems : adminMenuItems;
+  const image = res?.data?.imageUrl;
+
+  const handleLogout = () => {
+      dispatch(logout());
+      navigate("/");
+  };
 
   return (
     <Layout className="min-h-screen">
@@ -103,30 +111,85 @@ const Dashboard: React.FC = () => {
         theme="light"
         className={`border-r border-gray-200 ${
           collapsed ? "hidden" : "block"
-        } md:block  relative md:relative z-40`}
+        } md:block relative md:relative z-40`}
         width={300}
         style={{ background: "#fff", height: "100vh", overflowY: "auto" }}
       >
-        <div
-          className="absolute top-6 right-2 z-50 rounded-full p-1 border border-red-500"
-          onClick={() => setCollapsed(!collapsed)}
-        >
-          <X className="text-red-500" />
+        {!collapsed && (
+          <div
+            className="absolute md:hidden top-14 right-2 z-50 rounded-full p-1 border border-red-500"
+            onClick={() => setCollapsed(!collapsed)}
+          >
+            <X className="text-red-500" />
+          </div>
+        )}
+
+        <div className="flex flex-col h-full justify-between">
+          {/* User Info Section */}
+          <div className="p-6 bg-gradient-to-b from-gray-50 to-white shadow-lg rounded-xl">
+            <div className="flex flex-col gap-4 justify-center items-center p-4">
+              <Avatar
+                size={90}
+                className="avatar_image ring-4 ring-red-100 transition-transform hover:scale-105 animate-pulse"
+                src={image || "https://i.ibb.co.com/NgnypWqH/download.jpg"}
+              />
+              <div className="text-center">
+                <h2 className="text-2xl font-semibold text-gray-900 tracking-tight">
+                  {user?.name}
+                </h2>
+                <h2 className="text-lg text-gray-600 mt-1">{user?.email}</h2>
+                <h2 className="text-lg font-medium mt-2">
+                  <Tag color="green">
+                    Role: {user?.role === "admin" ? "Admin" : "User"}
+                  </Tag>
+                </h2>
+              </div>
+            </div>
+          </div>
+
+          {/* Menu Section */}
+          <div className="flex-grow">
+            <Menu
+              mode="inline"
+              selectedKeys={[location.pathname]}
+              items={menuItems.map((item) => ({
+                key: item.key,
+                icon: item.icon,
+                label: <Link to={item.path}>{item.label}</Link>,
+              }))}
+              className="border-none"
+            />
+          </div>
+
+          {/* Buttons Section */}
+          <div className="p-6 flex flex-col gap-3">
+            <Link onClick={handleLogout} to="/login">
+            
+              <Button
+                className="w-full"
+                color="danger"
+                size="large"
+                icon={<LogOut />}
+                variant="outlined"
+
+              >
+                Logout
+              </Button>
+            </Link>
+
+            <Link to="/">
+              <Button
+              className="w-full"
+                color="danger"
+                size="large"
+                icon={<House />}
+                variant="outlined"
+              >
+                Home
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="p-4">
-          <h2 className="text-xl font-bold text-gray-800">
-            {user?.role === "admin" ? "Admin Dashboard" : "My Account"}
-          </h2>
-        </div>
-        <Menu
-          mode="inline"
-          selectedKeys={[location.pathname]}
-          items={menuItems.map((item) => ({
-            key: item.key,
-            icon: item.icon,
-            label: <Link to={item.path}>{item.label}</Link>,
-          }))}
-        />
       </Sider>
       <Layout>
         <Content
@@ -134,16 +197,22 @@ const Dashboard: React.FC = () => {
           style={{ minHeight: "100vh" }}
         >
           <Routes>
-            {/* admin route */}
-            <Route path="/admin-dashboard-overview" element={<AdminDashboardOverview />} />
+            {/* Admin Routes */}
+            <Route
+              path="/admin-dashboard-overview"
+              element={<AdminDashboardOverview />}
+            />
             <Route path="/update-profile" element={<ProfilePage />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/products" element={<Products />} />
             <Route path="/users" element={<Users />} />
-            {/* user route */}
-            <Route path="/user-dashboard-overview" element={<UserDashboardOverview />} />
+            {/* User Routes */}
+            <Route
+              path="/user-dashboard-overview"
+              element={<UserDashboardOverview />}
+            />
             <Route path="/order-history" element={<OrderHistory />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="*" element={<Navigate to={`${user?.role === "admin" ? "/dashboard/admin-dashboard-overview" : "/dashboard/user-dashboard-overview"}`} replace />} />
           </Routes>
         </Content>
       </Layout>

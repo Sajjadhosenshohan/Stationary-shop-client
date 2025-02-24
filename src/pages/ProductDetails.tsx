@@ -1,27 +1,23 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Card,
-  InputNumber,
   Spin,
   Tabs,
   message,
   Breadcrumb,
+  Tag,
 } from "antd";
 import { ShoppingCart, Package } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { useGetAProductDataQuery } from "../redux/Features/productManagement/productApi";
-import { addToCart } from "../redux/Features/productManagement/cart.api";
 
 const ProductDetails: React.FC = () => {
-  const {id} = useParams<{ id: string }>();
-  const dispatch = useDispatch();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate()
   const { data: res, isLoading } = useGetAProductDataQuery(id!);
   const product = res?.data;
-  const [quantity, setQuantity] = React.useState(1);
-  console.log(product, id,"product");
 
   if (isLoading) {
     return (
@@ -35,7 +31,7 @@ const ProductDetails: React.FC = () => {
     return (
       <div className="text-center py-12">
         <h2 className="text-2xl font-bold text-gray-900">Product not found</h2>
-        <Link to="/products" className="text-indigo-600 hover:text-indigo-500">
+        <Link to="/products" className="text-red-600 hover:text-red-500">
           Back to products
         </Link>
       </div>
@@ -43,13 +39,13 @@ const ProductDetails: React.FC = () => {
   }
 
   const handleAddToCart = () => {
-    dispatch(addToCart({ ...product, quantity }));
     message.success("Added to cart");
+    navigate("/cart")
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <Breadcrumb className="mb-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 my-12">
+      <Breadcrumb className="mb-12">
         <Breadcrumb.Item>
           <Link to="/">Home</Link>
         </Breadcrumb.Item>
@@ -60,11 +56,11 @@ const ProductDetails: React.FC = () => {
       </Breadcrumb>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+        <div className="h-[400px] md:h-[500px]">
           <img
             src={product.imageUrl}
             alt={product.title}
-            className="w-full rounded-lg shadow-lg"
+            className="w-full h-full rounded-lg shadow-lg"
           />
         </div>
         <div>
@@ -72,21 +68,19 @@ const ProductDetails: React.FC = () => {
             {product.title}
           </h1>
           <p className="text-gray-500 mb-6">{product.description}</p>
-          <div className="flex items-center mb-6">
-            <span className="text-3xl font-bold text-indigo-600">
+          <div className="flex items-center gap-5 mb-10">
+            <span className="text-2xl font-semibold text-red-500">
               ${Number(product.price).toFixed(2)}
             </span>
-            <span className="ml-4 text-sm text-gray-500">
-              {product.stock} in stock
+            <span>
+              {product?.availability === "in-stock" ? (
+                <Tag color="success">{product?.availability}</Tag>
+              ) : (
+                <Tag color="warning">{product?.availability}</Tag>
+              )}
             </span>
           </div>
           <div className="flex items-center space-x-4 mb-8">
-            <InputNumber
-              min={1}
-              max={product.stock}
-              value={quantity}
-              onChange={(value) => setQuantity(value || 1)}
-            />
             <Button
               type="primary"
               size="large"

@@ -38,7 +38,7 @@ const UserDashboardOverview: React.FC = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-6">Dashboard Overview</h1>
+      <h1 className="text-2xl font-bold my-12">Dashboard Overview</h1>
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
           <Card>

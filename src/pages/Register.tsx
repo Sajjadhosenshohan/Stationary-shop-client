@@ -1,53 +1,42 @@
 import React from "react";
 import { Form, Input, Button, Card, message } from "antd";
 import { Link, useNavigate } from "react-router-dom";
+import { useRegisterMutation } from "../redux/auth/authApi";
 import { useDispatch } from "react-redux";
-import { useLoginMutation } from "../redux/auth/authApi";
 import { setCredentials } from "../redux/auth/authSlice";
+import { TUser } from "../types/auth.type";
 import { verifyToken } from "../utils/verifyToken";
 import { toast } from "sonner";
-import { TUser } from "../types/auth.type";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [login, { isLoading }] = useLoginMutation();
+  const [register, { isLoading }] = useRegisterMutation();
 
-  const onFinish = async (data: { email: string; password: string }) => {
+  const onFinish = async (values: {
+    name: string;
+    email: string;
+    password: string;
+  }) => {
     try {
-      // const response = await login(values).unwrap();
-
-      // const user = verifyToken(response.data.accessToken) as TUser;
-      // if (response?.success) {
-      //   toast.success(response.message, {
-      //     duration: 2000,
-      //   });
-      // }
-      // if (response?.success === false) {
-      //   toast.error(response.message, {
-      //     duration: 2000,
-      //   });
-      // }
-      // dispatch(
-      //   setCredentials({ user: user, token: response.data.accessToken })
-      // );
-      // navigate("/");
-
-      console.log("1 response >>",data);
-      const response = await login (data);
+      const data = {
+        name: values.name,
+        email: values.email,
+        password: values.password,
+      };
+      console.log("1 response >>", data);
+      const response = await register(data);
       console.log("2 response >>", response);
-      console.log(response?.data?.data);
+      console.log(response?.data?.data)
       if (response?.data?.success === true) {
         const user = verifyToken(response?.data?.data?.accessToken) as TUser;
         message.success(response?.data?.message);
         dispatch(
-          setCredentials({
-            user: user,
-            token: response?.data?.data?.accessToken,
-          })
+          setCredentials({ user: user, token: response?.data?.data?.accessToken })
         );
         navigate("/");
-      } else if (response?.error?.data?.success === false) {
+      }
+      else if(response?.error?.data?.success === false) {
         message.error(response?.error?.data?.message);
       }
     } catch (error) {
@@ -59,18 +48,28 @@ const Login: React.FC = () => {
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            Create an account
+          </h2>
           <p className="mt-2 text-gray-600">
-            Please sign in to your account to continue
+            Join us to start shopping for stationery
           </p>
         </div>
 
         <Form
-          name="login"
-          initialValues={{ remember: true }}
+          name="register"
           onFinish={onFinish}
           layout="vertical"
+          scrollToFirstError
         >
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Please input your name!" }]}
+          >
+            <Input size="large" placeholder="Enter your name" />
+          </Form.Item>
+
           <Form.Item
             label="Email"
             name="email"
@@ -90,6 +89,27 @@ const Login: React.FC = () => {
             <Input.Password size="large" placeholder="Enter your password" />
           </Form.Item>
 
+          <Form.Item
+            label="Confirm Password"
+            name="confirm"
+            dependencies={["password"]}
+            rules={[
+              { required: true, message: "Please confirm your password!" },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("The two passwords do not match!")
+                  );
+                },
+              }),
+            ]}
+          >
+            <Input.Password size="large" placeholder="Confirm your password" />
+          </Form.Item>
+
           <Form.Item>
             <Button
               type="primary"
@@ -98,18 +118,18 @@ const Login: React.FC = () => {
               block
               loading={isLoading}
             >
-              Sign in
+              Register
             </Button>
           </Form.Item>
 
           <div className="text-center">
             <p className="text-gray-600">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                to="/register"
+                to="/login"
                 className="text-indigo-600 hover:text-indigo-500"
               >
-                Register now
+                Sign in
               </Link>
             </p>
           </div>
@@ -119,4 +139,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;
