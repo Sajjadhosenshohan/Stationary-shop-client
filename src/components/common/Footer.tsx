@@ -18,6 +18,11 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
+                <a href="/home" className="text-gray-400 hover:text-white">
+                  Home
+                </a>
+              </li>
+              <li>
                 <a href="/products" className="text-gray-400 hover:text-white">
                   Products
                 </a>
@@ -27,11 +32,6 @@ const Footer: React.FC = () => {
                   About Us
                 </a>
               </li>
-              <li>
-                <a href="/contact" className="text-gray-400 hover:text-white">
-                  Contact
-                </a>
-              </li>
             </ul>
           </div>
           <div>
@@ -39,7 +39,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-2">
               <li className="flex items-center text-gray-400">
                 <Mail className="h-5 w-5 mr-2" />
-                info@stationeryshop.com
+                mdshohansajjad@gmail.com
               </li>
               <li className="flex items-center text-gray-400">
                 <Phone className="h-5 w-5 mr-2" />
@@ -72,7 +72,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
-          <p>&copy; 2024 StationeryShop. All rights reserved.</p>
+          <p>&copy; 2024 Elite Stationery. All rights reserved.</p>
         </div>
       </div>
     </div>

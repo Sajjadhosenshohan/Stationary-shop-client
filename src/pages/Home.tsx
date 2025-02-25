@@ -17,52 +17,62 @@ const Home: React.FC = () => {
   ]);
 
   const products = res?.data?.result;
-  console.log(products);
 
   const carouselItems = [
     {
       title: "Back to School Sale",
       description: "Get up to 50% off on school supplies",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6",
+      image: "img1.jpg",
     },
     {
       title: "Art Supplies Collection",
       description: "Professional supplies for artists",
-      image: "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634",
+      image: "img2.jpg",
     },
     {
       title: "Office Essentials",
       description: "Everything you need for your workspace",
-      image: "https://images.unsplash.com/photo-1455894127589-22f75500213a",
+      image: "img3.jpg",
     },
   ];
 
   return (
     <div>
-      <Carousel autoplay className="mb-12">
+      <Carousel className="mb-12" autoplay autoplaySpeed={5000}>
         {carouselItems.map((item, index) => (
-          <div key={index}>
-            <div
-              className="relative h-[500px] bg-cover bg-center"
-              style={{ backgroundImage: `url(${item.image})` }}
-            >
-              <div className="absolute inset-0 bg-black bg-opacity-50" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-white px-4">
-                  <h2 className="text-4xl font-bold mb-4">{item.title}</h2>
-                  <p className="text-xl mb-8">{item.description}</p>
-                  <Link to="/products">
-                    <Button type="primary" size="large">
-                      Shop Now
-                    </Button>
-                  </Link>
-                </div>
+          <div
+            key={index}
+            className="relative h-[400px] md:h-[500px] lg:h-[600px]"
+          >
+            {/* Background Image */}
+            <img
+              src={item?.image}
+              alt={item.title}
+              className="w-full h-full object-cover"
+            />
+
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent" />
+
+            {/* Centered Text */}
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center text-white px-6 py-4 bg-black/40 rounded-lg">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
+                  {item.title}
+                </h2>
+                <p className="text-xl text-gray-200 mb-6">{item.description}</p>
+                <Link to="/products">
+                  <Button type="primary" size="large">
+                    Shop Now
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         ))}
       </Carousel>
 
+      {/* <img src="https://i.ibb.co.com/rRWy7WWJ/img2.jpg" alt="" /> */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* features product */}
         <section className="mb-16">
@@ -86,7 +96,7 @@ const Home: React.FC = () => {
         </section>
 
         <WhyChooseUs />
-        <Blog/>
+        <Blog />
       </div>
     </div>
   );

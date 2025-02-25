@@ -42,10 +42,10 @@ const Products: React.FC = () => {
       if (imageFile) {
         const formData = new FormData();
         formData.append("file", imageFile);
-        formData.append("upload_preset", "mern_product");
-        formData.append("cloud_name", "djzt5tkwu");
+        formData.append("upload_preset", import.meta.env.VITE_UPLOAD_PRESET);
+        formData.append("cloud_name", import.meta.env.VITE_CLOUD_NAME);
         const response = await axios.post(
-          "https://api.cloudinary.com/v1_1/djzt5tkwu/image/upload",
+          import.meta.env.VITE_UPLOAD_LINK,
           formData
         );
         imageUrl = response.data.secure_url;

@@ -47,6 +47,7 @@ export interface TOrderProduct {
   authorEmail: string;
   isAvailable: boolean;
   isDeleted: boolean;
+  availability: "in-stock" | "out-of-stock"
   quantity: number;
   __v: number;
 }

@@ -19,7 +19,7 @@ const AllProducts: React.FC = () => {
 
     setParams((prevParams) => {
       const updatedParams = prevParams ? [...prevParams] : [];
-      const filterParams = updatedParams.filter((param) => param.name !== name);
+      const filterParams = updatedParams?.filter((param) => param.name !== name);
 
       if (name === "minPrice" || name === "maxPrice") {
         const priceRangeParam = {
@@ -134,12 +134,12 @@ const AllProducts: React.FC = () => {
             <div className="flex justify-center items-center h-64">
               <Spin size="large" />
             </div>
-          ) : !products.length ? (
+          ) : !products?.length ? (
             <Empty description="No products found" />
           ) : (
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {products.map((product: TOrderProduct) => (
+                {products?.map((product: TOrderProduct) => (
                   <ProductCard key={product?._id} product={product} />
                 ))}
               </div>

@@ -12,12 +12,16 @@ import {
 import { ShoppingCart, Package } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useGetAProductDataQuery } from "../redux/Features/productManagement/productApi";
+import { useAppDispatch } from "../redux/hooks";
+import { addToCart } from "../redux/Features/productManagement/cart.api";
 
 const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate()
   const { data: res, isLoading } = useGetAProductDataQuery(id!);
   const product = res?.data;
+  const dispatch = useAppDispatch();
+  const [quantity, setQuantity] = React.useState(1);
 
   if (isLoading) {
     return (
@@ -39,6 +43,7 @@ const ProductDetails: React.FC = () => {
   }
 
   const handleAddToCart = () => {
+    dispatch(addToCart({ ...product, quantity }));
     message.success("Added to cart");
     navigate("/cart")
   };
@@ -86,7 +91,7 @@ const ProductDetails: React.FC = () => {
               size="large"
               icon={<ShoppingCart className="h-5 w-5" />}
               onClick={handleAddToCart}
-              disabled={product.stock === 0}
+              disabled={product?.availability === "out-of-stock"}
             >
               Add to Cart
             </Button>

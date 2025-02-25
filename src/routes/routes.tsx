@@ -5,13 +5,12 @@ import Login from "../pages/Login";
 import Cart from "../pages/Cart";
 import Dashboard from "../pages/Dashboard";
 import ProductDetails from "../pages/ProductDetails";
-import PaymentSuccess from "../pages/payment/PaymentSuccess";
 import { PaymentFailed } from "../pages/payment/PaymentFailed";
 import AllProducts from "../pages/AllProducts";
 import About from "../pages/About";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
-
+import PaymentSuccess from "../pages/payment/PaymentSuccess";
 export const router = createBrowserRouter([
   {
     path: "/",

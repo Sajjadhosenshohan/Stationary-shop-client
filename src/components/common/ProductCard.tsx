@@ -1,22 +1,14 @@
 import React from "react";
-import { Card, Button, message } from "antd";
+import { Card, Button, Badge } from "antd";
 import { Link } from "react-router-dom";
-import { addToCart } from "../../redux/Features/productManagement/cart.api";
-import { useAppDispatch } from "../../redux/hooks";
 import { TOrderProduct } from "../../types";
+import { SearchOutlined } from "@ant-design/icons";
 
 interface ProductCardProps {
   product: TOrderProduct;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const dispatch = useAppDispatch();
-
-  const handleAddToCart = () => {
-    dispatch(addToCart(product));
-    message.success("Added to cart");
-  };
-
   return (
     <Card
       hoverable
@@ -27,8 +19,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           className="h-48 w-full object-cover"
         />
       }
-      className="h-full flex flex-col"
+      className="h-full flex flex-col relative"
     >
+      {product?.availability === "in-stock" ? (
+        <div className=" absolute top-44 right-0">
+          <Badge.Ribbon text="In stock" color="#6EC531"></Badge.Ribbon>
+        </div>
+      ) : (
+        <div className=" absolute top-44 right-0">
+          <Badge.Ribbon text="Out of stock" color="red"></Badge.Ribbon>
+        </div>
+      )}
       <div className="flex-grow">
         <h3 className="text-lg font-semibold mb-2">{product?.title}</h3>
 
@@ -52,9 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </span>
           <div className="space-x-2">
             <Link to={`/products/${product?._id}`}>
-              
-
-              <Button color="danger" variant="filled">
+              <Button type="primary" icon={<SearchOutlined />}>
                 View details
               </Button>
             </Link>
