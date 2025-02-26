@@ -3,11 +3,8 @@ import {
     ShoppingBag,
     Package,
     Users,
-    Settings,
     LayoutDashboard,
     FileText,
-    Heart,
-    CreditCard,
   } from 'lucide-react';
   
  export const adminMenuItems = [

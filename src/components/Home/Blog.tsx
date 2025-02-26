@@ -39,7 +39,7 @@ const Blog = () => {
                       <p className="text-sm text-gray-500">January 2, 2025</p>
                     </div>
     
-                    {/* <a href="#" className="inline-block text-blue-500 underline hover:text-blue-400">Read more</a> */}
+                    
                   </div>
                 </div>
               </div>

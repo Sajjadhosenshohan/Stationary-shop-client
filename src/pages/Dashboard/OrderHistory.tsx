@@ -137,7 +137,6 @@ const OrderHistory: React.FC = () => {
     );
   };
 
-  console.log(orders, "orders");
   const columns = [
     {
       title: "Transaction Id",

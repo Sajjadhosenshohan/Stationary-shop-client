@@ -74,7 +74,7 @@ export function ProfilePage() {
       return false;
     }
     setImageFile(file);
-    return false; // Return false to prevent auto upload
+    return false;
   };
 
   const handleSubmit = async (values: any) => {

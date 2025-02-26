@@ -1,15 +1,12 @@
 import React from "react";
 import { Button, Carousel, Card } from "antd";
-import { ArrowRight, Star } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProductCard from "../components/common/ProductCard";
 import { useGetAllProductDataQuery } from "../redux/Features/productManagement/productApi";
 import { TOrderProduct } from "../types";
 import WhyChooseUs from "../components/Home/WhyChooseUs";
 import Blog from "../components/Home/Blog";
-
-// import { useGetProductsQuery } from '../store/api';
-// import ProductCard from '../components/ProductCard';
 
 const Home: React.FC = () => {
   const { data: res, isLoading } = useGetAllProductDataQuery([
@@ -71,15 +68,13 @@ const Home: React.FC = () => {
           </div>
         ))}
       </Carousel>
-
-      {/* <img src="https://i.ibb.co.com/rRWy7WWJ/img2.jpg" alt="" /> */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* features product */}
         <section className="mb-16">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold">Featured Products</h2>
             <Link to="/products">
-              <Button type="link" className="flex items-center">
+              <Button type="link" color="primary" variant="solid" className="flex items-center animate-bounce">
                 View All <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             </Link>

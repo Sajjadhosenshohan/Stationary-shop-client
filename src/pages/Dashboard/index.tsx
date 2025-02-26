@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Layout, Menu, Button, Avatar, Tag } from "antd";
-import { Routes, Route, Navigate, Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/auth/authSlice";
 import { useGetProfileDataQuery } from "../../redux/Features/userManagement/userManagement.api";
@@ -23,6 +30,7 @@ import { ProfilePage } from "../profile";
 import UserDashboardOverview from "./UserDashboardOverview";
 import AdminDashboardOverview from "./AdminDashboardOverview";
 import { useDispatch } from "react-redux";
+import PrivateRoute from "../../components/common/PrivateRoute";
 
 const { Sider, Content } = Layout;
 
@@ -93,8 +101,8 @@ const Dashboard: React.FC = () => {
   const image = res?.data?.imageUrl;
 
   const handleLogout = () => {
-      dispatch(logout());
-      navigate("/");
+    dispatch(logout());
+    navigate("/");
   };
 
   return (
@@ -164,14 +172,12 @@ const Dashboard: React.FC = () => {
           {/* Buttons Section */}
           <div className="p-6 flex flex-col gap-3">
             <Link onClick={handleLogout} to="/login">
-            
               <Button
                 className="w-full"
                 color="danger"
                 size="large"
                 icon={<LogOut />}
                 variant="outlined"
-
               >
                 Logout
               </Button>
@@ -179,7 +185,7 @@ const Dashboard: React.FC = () => {
 
             <Link to="/">
               <Button
-              className="w-full"
+                className="w-full"
                 color="danger"
                 size="large"
                 icon={<House />}
@@ -200,19 +206,56 @@ const Dashboard: React.FC = () => {
             {/* Admin Routes */}
             <Route
               path="/admin-dashboard-overview"
-              element={<AdminDashboardOverview />}
+              element={
+                <PrivateRoute requireAdmin>
+                  <AdminDashboardOverview />
+                </PrivateRoute>
+              }
             />
-            <Route path="/update-profile" element={<ProfilePage />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/users" element={<Users />} />
+            <Route
+              path="/update-profile"
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/orders"
+              element={
+                <PrivateRoute requireAdmin>
+                  <Orders />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/products"
+              element={
+                <PrivateRoute requireAdmin>
+                  <Products />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/users"  element={<PrivateRoute requireAdmin><Users /> </PrivateRoute>} />
             {/* User Routes */}
             <Route
               path="/user-dashboard-overview"
-              element={<UserDashboardOverview />}
+              element={<PrivateRoute><UserDashboardOverview /></PrivateRoute>}
             />
-            <Route path="/order-history" element={<OrderHistory />} />
-            <Route path="*" element={<Navigate to={`${user?.role === "admin" ? "/dashboard/admin-dashboard-overview" : "/dashboard/user-dashboard-overview"}`} replace />} />
+            <Route path="/order-history" element={<PrivateRoute> <OrderHistory /></PrivateRoute>} />
+            <Route
+              path="*"
+              element={
+                <Navigate
+                  to={`${
+                    user?.role === "admin"
+                      ? "/dashboard/admin-dashboard-overview"
+                      : "/dashboard/user-dashboard-overview"
+                  }`}
+                  replace
+                />
+              }
+            />
           </Routes>
         </Content>
       </Layout>

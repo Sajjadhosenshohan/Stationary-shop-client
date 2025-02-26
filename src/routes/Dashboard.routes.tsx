@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu,  } from 'antd';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
@@ -16,12 +16,6 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <Layout className="min-h-screen">
-      {/* Toggle Button for Small Screens */}
-      {/* <Button
-        className="md:hidden fixed top-4 left-4 z-50"
-        icon={<MenuOutlined />}
-        onClick={() => setCollapsed(!collapsed)}
-      /> */}
 
       {/* Sidebar */}
       <Sider

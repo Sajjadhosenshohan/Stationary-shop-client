@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../redux/auth/authApi";
 import { setCredentials } from "../redux/auth/authSlice";
 import { verifyToken } from "../utils/verifyToken";
-import { toast } from "sonner";
 import { TUser } from "../types/auth.type";
 
 const Login: React.FC = () => {
@@ -15,28 +14,8 @@ const Login: React.FC = () => {
 
   const onFinish = async (data: { email: string; password: string }) => {
     try {
-      // const response = await login(values).unwrap();
-
-      // const user = verifyToken(response.data.accessToken) as TUser;
-      // if (response?.success) {
-      //   toast.success(response.message, {
-      //     duration: 2000,
-      //   });
-      // }
-      // if (response?.success === false) {
-      //   toast.error(response.message, {
-      //     duration: 2000,
-      //   });
-      // }
-      // dispatch(
-      //   setCredentials({ user: user, token: response.data.accessToken })
-      // );
-      // navigate("/");
-
-      console.log("1 response >>",data);
+    
       const response = await login (data);
-      console.log("2 response >>", response);
-      console.log(response?.data?.data);
       if (response?.data?.success === true) {
         const user = verifyToken(response?.data?.data?.accessToken) as TUser;
         message.success(response?.data?.message);
@@ -59,10 +38,7 @@ const Login: React.FC = () => {
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="max-w-md w-full">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-          <p className="mt-2 text-gray-600">
-            Please sign in to your account to continue
-          </p>
+          <h2 className="text-3xl font-bold text-gray-900">Login</h2>
         </div>
 
         <Form

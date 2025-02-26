@@ -11,36 +11,45 @@ import About from "../pages/About";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import PaymentSuccess from "../pages/payment/PaymentSuccess";
+import PrivateRoute from "../components/common/PrivateRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
       { index: true, element: <Home /> },
-        { path: "products", element: <AllProducts /> },
-        { path: "products/:id", element: <ProductDetails /> },
-        { path: "/payment-successful/:transactionId", element: <PaymentSuccess /> },
-        { path: "/payment-failed/:transactionId", element: <PaymentFailed /> },
-        { path: "about", element: <About /> },
+      { path: "products", element: <AllProducts /> },
+      { path: "products/:id", element: <ProductDetails /> },
+      {
+        path: "/payment-successful/:transactionId",
+        element: (
+          <PrivateRoute>
+            <PaymentSuccess />
+          </PrivateRoute>
+        ),
+      },
+      { path: "/payment-failed/:transactionId", element: <PaymentFailed /> },
+      {
+        path: "about",
+        element: <About />,
+      },
       { path: "login", element: <Login /> },
-        { path: "register", element: <Register /> },
-        {
-          path: "cart",
-          element: (
-            // <PrivateRoute>
-              <Cart />
-            // </PrivateRoute>
-          ),
-        },
-        {
-          path: "dashboard/*",
-          element: (
-            // <PrivateRoute>
-              <Dashboard />
-            // </PrivateRoute>
-          ),
-        },
-        { path: "*", element: <NotFound /> },
+      { path: "register", element: <Register /> },
+      {
+        path: "cart",
+        element: (
+          <PrivateRoute>
+            <Cart />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "dashboard/*",
+        element: (
+            <Dashboard />
+        ),
+      },
+      { path: "*", element: <NotFound /> },
     ],
   },
 ]);

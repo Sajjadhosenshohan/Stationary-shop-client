@@ -25,7 +25,7 @@ export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
-    cart: cartReducer,  // ✅ Cart Reducer যুক্ত করলাম
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({

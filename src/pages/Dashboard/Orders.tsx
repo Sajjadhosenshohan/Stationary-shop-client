@@ -56,19 +56,19 @@ const Orders: React.FC = () => {
     }
   };
 
-  // Function to handle updating the order status
+  
   const handleOrderStatus = async (id: string, newStatus: string) => {
     const updateInfo = {
       id,
-      orderStatus: newStatus, // new order status
+      orderStatus: newStatus,
     };
 
     try {
-      // Assuming `updateOrderStatus` is a function that makes an API call to update the status
+      
       const result = await changeOrderStatus(updateInfo).unwrap();
       toast.success(result.message); // Show success toast message
     } catch (error) {
-      toast.error("Something Went Wrong"); // Show error toast message
+      toast.error("Something Went Wrong");
     }
   };
   const expandedRowRender = (record: TOrder) => {

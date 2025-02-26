@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Row, Col, Statistic } from "antd";
-import { ShoppingBag, Package, DollarSign, TrendingUp } from "lucide-react";
+import { ShoppingBag, Package, DollarSign } from "lucide-react";
 import { useCurrentUser } from "../../redux/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 import { useGetAdminOrdersDataQuery } from "../../redux/Features/OrderManagement/orderApi";
@@ -8,7 +8,7 @@ import { TOrder } from "../../types";
 
 const AdminDashboardOverview: React.FC = () => {
   const user = useAppSelector(useCurrentUser);
-  const { data: res, isFetching } = useGetAdminOrdersDataQuery(user?.email, {
+  const { data: res } = useGetAdminOrdersDataQuery(user?.email, {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
@@ -20,20 +20,19 @@ const AdminDashboardOverview: React.FC = () => {
         const orderTotal = order?.products?.reduce(
           (sum, product) => sum + product?.price,
           0
-        ); // এক অর্ডারের মোট দাম
+        );
 
-        acc.totalOrders += 1; // প্রতিটি অর্ডারের জন্য 1 যোগ করা
-        acc.totalProducts += order?.products?.length; // প্রতিটি অর্ডারের সব প্রোডাক্ট গণনা
-        acc.totalRevenue += orderTotal; // মোট আয়
+        acc.totalOrders += 1;
+        acc.totalProducts += order?.products?.length;
+        acc.totalRevenue += orderTotal;
 
         return acc;
       },
-      { totalOrders: 0, totalProducts: 0, totalRevenue: 0 } // শুরুতে 0 সেট করে দিলাম
+      { totalOrders: 0, totalProducts: 0, totalRevenue: 0 }
     );
   };
 
   const orderStats = calculateOrderStats(orders);
-  console.log(orderStats);
 
   return (
     <div>
@@ -68,8 +67,6 @@ const AdminDashboardOverview: React.FC = () => {
         </Col>
         
       </Row>
-
-      {/* Add more dashboard widgets here */}
     </div>
   );
 };

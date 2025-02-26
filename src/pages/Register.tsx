@@ -1,17 +1,41 @@
-import React from "react";
-import { Form, Input, Button, Card, message } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Card, message, Upload } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../redux/auth/authApi";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../redux/auth/authSlice";
 import { TUser } from "../types/auth.type";
 import { verifyToken } from "../utils/verifyToken";
-import { toast } from "sonner";
+import { UploadOutlined } from "@ant-design/icons";
+import axios from "axios";
+
+const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_UPLOAD_PRESET;
+const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUD_NAME;
+const CLOUDINARY_UPLOAD_URL = import.meta.env.VITE_UPLOAD_LINK;
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [register, { isLoading }] = useRegisterMutation();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const handleImageUpload = async () => {
+    if (!imageFile) return null;
+
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+    formData.append("cloud_name", CLOUDINARY_CLOUD_NAME);
+
+    try {
+      const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
+      return response.data.secure_url;
+    } catch (error) {
+      message.error("Image upload failed!");
+      return null;
+    }
+  };
 
   const onFinish = async (values: {
     name: string;
@@ -19,25 +43,25 @@ const Register: React.FC = () => {
     password: string;
   }) => {
     try {
-      const data = {
-        name: values.name,
-        email: values.email,
-        password: values.password,
-      };
-      console.log("1 response >>", data);
+      let finalImageUrl = imageUrl;
+
+      if (imageFile) {
+        const uploadedImageUrl = await handleImageUpload();
+        if (uploadedImageUrl) finalImageUrl = uploadedImageUrl;
+      }
+
+      const data = { ...values, imageUrl: finalImageUrl };
       const response = await register(data);
-      console.log("2 response >>", response);
-      console.log(response?.data?.data)
-      if (response?.data?.success === true) {
+
+      if (response?.data?.success) {
         const user = verifyToken(response?.data?.data?.accessToken) as TUser;
         message.success(response?.data?.message);
         dispatch(
-          setCredentials({ user: user, token: response?.data?.data?.accessToken })
+          setCredentials({ user, token: response?.data?.data?.accessToken })
         );
         navigate("/");
-      }
-      else if(response?.error?.data?.success === false) {
-        message.error(response?.error?.data?.message);
+      } else {
+        message.error(response?.error?.data?.message || "Registration failed!");
       }
     } catch (error) {
       message.error("Invalid credentials");
@@ -49,11 +73,8 @@ const Register: React.FC = () => {
       <Card className="max-w-md w-full">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-gray-900">
-            Create an account
+            Register Now
           </h2>
-          <p className="mt-2 text-gray-600">
-            Join us to start shopping for stationery
-          </p>
         </div>
 
         <Form
@@ -97,9 +118,8 @@ const Register: React.FC = () => {
               { required: true, message: "Please confirm your password!" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || getFieldValue("password") === value)
                     return Promise.resolve();
-                  }
                   return Promise.reject(
                     new Error("The two passwords do not match!")
                   );
@@ -108,6 +128,25 @@ const Register: React.FC = () => {
             ]}
           >
             <Input.Password size="large" placeholder="Confirm your password" />
+          </Form.Item>
+
+          <Form.Item label="Profile Picture">
+            <div>
+              <Upload
+                beforeUpload={(file) => {
+                  setImageFile(file);
+                  return false;
+                }}
+                showUploadList={false}
+              >
+                <Button className="block" icon={<UploadOutlined />}>Upload Profile Image</Button>
+              </Upload>
+            </div>
+            {imageFile && (
+              <p className="text-green-600 mt-2">
+                File selected: {imageFile.name}
+              </p>
+            )}
           </Form.Item>
 
           <Form.Item>
@@ -125,10 +164,7 @@ const Register: React.FC = () => {
           <div className="text-center">
             <p className="text-gray-600">
               Already have an account?{" "}
-              <Link
-                to="/login"
-                className="text-indigo-600 hover:text-indigo-500"
-              >
+              <Link to="/login" className="text-red-600 hover:text-red-500">
                 Sign in
               </Link>
             </p>

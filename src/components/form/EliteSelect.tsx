@@ -1,6 +1,5 @@
 import { Form, Select } from 'antd';
-import { useEffect } from 'react';
-import { Controller, useFormContext, useWatch } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
 type TPHSelectProps = {
   label: string;
@@ -8,27 +7,10 @@ type TPHSelectProps = {
   options: { value: string; label: string; disabled?: boolean }[] | undefined;
   disabled?: boolean;
   mode?: 'multiple' | undefined;
-  onValueChange: React.Dispatch<React.SetStateAction<string>>;
+  defaultValue?: any;
 };
 
-const PHSelectWithWatch = ({
-  label,
-  name,
-  options,
-  disabled,
-  mode,
-  onValueChange,
-}: TPHSelectProps) => {
-  const method = useFormContext();
-  const inputValue = useWatch({
-    control: method.control,
-    name,
-  });
-
-  useEffect(() => {
-    onValueChange(inputValue);
-  }, [inputValue]);
-
+const EliteSelect = ({ label, name, options, disabled, mode,defaultValue }: TPHSelectProps) => {
   return (
     <Controller
       name={name}
@@ -41,6 +23,7 @@ const PHSelectWithWatch = ({
             options={options}
             size="large"
             disabled={disabled}
+            defaultValue={defaultValue}
           />
           {error && <small style={{ color: 'red' }}>{error.message}</small>}
         </Form.Item>
@@ -49,4 +32,4 @@ const PHSelectWithWatch = ({
   );
 };
 
-export default PHSelectWithWatch;
+export default EliteSelect;

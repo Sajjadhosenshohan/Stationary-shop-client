@@ -18,7 +18,6 @@
   ];
 
   export const allProductsCategories = [
-    "all",
     "writing",
     "paper",
     "art supplies",

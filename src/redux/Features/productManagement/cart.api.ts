@@ -24,18 +24,17 @@ const cartSlice = createSlice({
       const existingItem = state.items.find(
         (item) => item._id === action.payload._id
       );
-      // console.log(loadCartFromLocalStorage(), "sob items")
       if (existingItem) {
         existingItem.quantity += 1;
       } else {
         state.items.push({ ...action.payload, quantity: 1 });
       }
-      localStorage.setItem("cart", JSON.stringify(state.items)); // ✅ Local Storage-এ Save
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
 
     removeFromCart: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter((item) => item._id !== action.payload);
-      localStorage.setItem("cart", JSON.stringify(state.items)); // ✅ Local Storage Update
+      localStorage.setItem("cart", JSON.stringify(state.items)); //  Local Storage Update
     },
 
     updateQuantity: (
@@ -46,12 +45,12 @@ const cartSlice = createSlice({
       if (item) {
         item.quantity = action.payload.quantity;
       }
-      localStorage.setItem("cart", JSON.stringify(state.items)); // ✅ Local Storage Update
+      localStorage.setItem("cart", JSON.stringify(state.items)); //  Local Storage Update
     },
 
     clearCart: (state) => {
       state.items = [];
-      localStorage.removeItem("cart"); // ✅ Local Storage Clear
+      localStorage.removeItem("cart"); //  Local Storage Clear
     },
   },
 });

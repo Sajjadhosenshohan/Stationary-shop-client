@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
-import { Button, Menu, Dropdown, Drawer, ConfigProvider, theme } from "antd";
+import {
+  Button,
+  Menu,
+  Dropdown,
+  Drawer,
+  ConfigProvider,
+  theme,
+  Avatar,
+} from "antd";
 import { useSelector, useDispatch } from "react-redux";
 import {
   LayoutDashboard,
@@ -14,10 +22,12 @@ import {
   LogIn,
   UserPlus,
   Package,
+  Divide,
 } from "lucide-react";
 import { RootState } from "../../redux/store";
 import { useAppSelector } from "../../redux/hooks";
 import { logout, useCurrentUser } from "../../redux/auth/authSlice";
+import { useGetProfileDataQuery } from "../../redux/Features/userManagement/userManagement.api";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
@@ -27,14 +37,20 @@ const Navbar: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state?.cart?.items);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const isDashboardRoute = location.pathname.startsWith("/dashboard");
-  console.log(isDashboardRoute);
+
+  const { data: res } = useGetProfileDataQuery(user?.email);
+  const currentUserInfo = res?.data;
+
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
     setDrawerOpen(false);
   };
 
-  const roleBaseRoute = user?.role === "admin" ? "/dashboard/admin-dashboard-overview" : "/dashboard/user-dashboard-overview"
+  const roleBaseRoute =
+    user?.role === "admin"
+      ? "/dashboard/admin-dashboard-overview"
+      : "/dashboard/user-dashboard-overview";
 
   const navigationItems = [
     { key: "/", label: "Home", icon: <Home className="h-5 w-5" /> },
@@ -50,6 +66,8 @@ const Navbar: React.FC = () => {
     },
     { key: "/about", label: "About Us", icon: <Info className="h-5 w-5" /> },
   ];
+
+  // console.log(currentUserInfo);
 
   const userMenu = (
     <Menu className="w-48">
@@ -101,7 +119,7 @@ const Navbar: React.FC = () => {
         selectedKeys={[location.pathname]}
         className="border-none"
       >
-        {navigationItems.map((item) => (
+        {navigationItems?.map((item) => (
           <Menu.Item
             key={item.key}
             icon={item.icon}
@@ -126,6 +144,7 @@ const Navbar: React.FC = () => {
             >
               Profile
             </Menu.Item>
+
             <Menu.Item
               key="dashboard"
               icon={<LayoutDashboard className="h-5 w-5" />}
@@ -191,11 +210,10 @@ const Navbar: React.FC = () => {
               {/* Logo */}
               <div className="flex-shrink-0 flex items-center">
                 <Link to="/" className="flex items-center h-16 w-20">
-                  {/* <PencilRuler className="h-8 w-8 text-red-600" />
-                  <span className="hidden md:block text-xl font-bold text-gray-900">
-                    StationeryShop
-                  </span> */}
-                  <img src={"https://i.ibb.co.com/0jSQHFxP/logo.png"} className="w-full h-full"></img>
+                  <img
+                    src={"https://i.ibb.co.com/0jSQHFxP/logo.png"}
+                    className="w-full h-full"
+                  ></img>
                 </Link>
               </div>
               {/* Desktop Navigation */}
@@ -225,17 +243,23 @@ const Navbar: React.FC = () => {
                   )}
                 </Link>
 
-                <Dropdown
-                  overlay={userMenu}
-                  placement="bottomRight"
-                  trigger={["click"]}
-                >
-                  <Button
-                    type="text"
-                    className="flex items-center hover:text-red-600"
-                    icon={<User className="h-6 w-6" />}
-                  />
-                </Dropdown>
+                {user ? (
+                  <Dropdown
+                    overlay={userMenu}
+                    placement="bottomRight"
+                    className="cursor-pointer"
+                    trigger={["click"]}
+                  >
+                    {/* <Avatar className="cursor-pointer" size="large" src={user?.imageUrl || <User className="h-6 w-6" />} /> */}
+                    <Avatar size="large" src={currentUserInfo?.imageUrl} />
+                  </Dropdown>
+                ) : (
+                  <Link to={"/login"}>
+                    <Button color="danger" variant="outlined">
+                      Login
+                    </Button>
+                  </Link>
+                )}
               </div>
               {/* Mobile Menu Button */}
               <div className="md:hidden flex items-center space-x-4">
@@ -269,6 +293,7 @@ const Navbar: React.FC = () => {
             open={drawerOpen}
             width={280}
           >
+            <div className="grid place-content-center my-10"><Avatar size={50} src={currentUserInfo?.imageUrl} /></div>
             {drawerContent}
           </Drawer>
         </nav>

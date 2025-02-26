@@ -13,7 +13,7 @@ const orderApi = baseApi.injectEndpoints({
       query: (userEmail) => ({
         url: "/payment/get-admin-order-data",
         method: "POST",
-        body: { email: userEmail }, // অবজেক্ট আকারে ইমেইল পাঠানো হচ্ছে
+        body: { email: userEmail },
         
       }),
     }),
@@ -21,7 +21,7 @@ const orderApi = baseApi.injectEndpoints({
       query: (userEmail) => ({
         url: "/payment/get-user-order-data",
         method: "POST",
-        body: { email: userEmail } // অবজেক্ট আকারে ইমেইল পাঠানো হচ্ছে
+        body: { email: userEmail }
         
       }),
       providesTags:["orderHistory"]

@@ -20,7 +20,6 @@ const MainLayout: React.FC = () => {
       <AntLayout>
         <Navbar />
         <Content>
-          {/* {!isDashboardRoute && <Navbar />} */}
           <div className="min-h-screen">
             <Outlet />
           </div>

@@ -21,7 +21,7 @@ const AllProducts: React.FC = () => {
       const updatedParams = prevParams ? [...prevParams] : [];
       const filterParams = updatedParams?.filter((param) => param.name !== name);
 
-      if (name === "minPrice" || name === "maxPrice") {
+      if(name === "minPrice" || name === "maxPrice") {
         const priceRangeParam = {
           name: name === "minPrice" ? "minPrice" : "maxPrice",
           value: Number(value),
@@ -39,8 +39,6 @@ const AllProducts: React.FC = () => {
 
   const products = response?.data?.result;
   const meta = response?.data?.meta;
-  // console.log("res",products)
-  // console.log("meta",meta)
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -79,11 +77,12 @@ const AllProducts: React.FC = () => {
                 id=""
                 className="border border-neutral-300 rounded p-2 focus:outline-none  focus:text-red-500  focus:border-red-500 hover:text-red-500 hover:border-red-500"
               >
-                <option disabled selected>
+                <option disabled >
                   Filter By Category
                 </option>
+                <option value="all">All</option>
                 {allProductsCategories?.map((item, idx) => (
-                  <option value={item} key={idx}>
+                  <option  value={item} key={idx}>
                     {item}
                   </option>
                 ))}

@@ -9,7 +9,7 @@ type TInputProps = {
   defaultValue?: any;
 };
 
-const PHInput = ({ type, name, label, disabled,defaultValue }: TInputProps) => {
+const EliteInput = ({ type, name, label, disabled,defaultValue }: TInputProps) => {
   return (
     <div style={{ marginBottom: '20px' }}>
       <Controller
@@ -31,4 +31,4 @@ const PHInput = ({ type, name, label, disabled,defaultValue }: TInputProps) => {
   );
 };
 
-export default PHInput;
+export default EliteInput;

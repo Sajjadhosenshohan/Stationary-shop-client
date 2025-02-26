@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Button, Table, Form, Upload, Tag } from "antd";
 import { PlusCircle, UploadIcon } from "lucide-react";
-import PHForm from "../../components/form/PHForm";
-import PHInput from "../../components/form/PHInput";
-import PHSelect from "../../components/form/PHSelect";
-import PHTextArea from "../../components/form/PHTextArea";
 import { toast } from "sonner";
 import { FieldValues } from "react-hook-form";
 import {
@@ -17,6 +13,10 @@ import { useAppSelector } from "../../redux/hooks";
 import { useCurrentUser } from "../../redux/auth/authSlice";
 import axios from "axios";
 import { category } from "../../constants/global";
+import EliteInput from "../../components/form/EliteInput";
+import EliteTextArea from "../../components/form/EliteTextArea";
+import EliteSelect from "../../components/form/EliteSelect";
+import EliteForm from "../../components/form/EliteForm";
 
 const Products: React.FC = () => {
   const [addProduct] = useAddProductMutation();
@@ -153,7 +153,7 @@ const Products: React.FC = () => {
           dataSource={products}
           rowKey="_id"
           loading={isFetching}
-          scroll={{ x: "max-content" }} // Enables horizontal scrolling on small screens
+          scroll={{ x: "max-content" }}
         />
       </div>
       <Modal
@@ -162,31 +162,31 @@ const Products: React.FC = () => {
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
-        <PHForm onSubmit={handleSubmit}>
-          <PHInput
+        <EliteForm onSubmit={handleSubmit}>
+          <EliteInput
             type="text"
             name="title"
             label="Title"
             defaultValue={editingProduct?.title}
           />
-          <PHInput
+          <EliteInput
             type="number"
             name="numberOfProduct"
             label="Number Of Product"
             defaultValue={editingProduct?.numberOfProduct}
           />
-          <PHInput
+          <EliteInput
             type="number"
             name="price"
             label="Price"
             defaultValue={editingProduct?.price}
           />
-          <PHTextArea
+          <EliteTextArea
             name="description"
             label="Description"
             defaultValue={editingProduct?.description}
           />
-          <PHSelect
+          <EliteSelect
             name="category"
             label="Category"
             options={category}
@@ -208,7 +208,7 @@ const Products: React.FC = () => {
           <Button type="primary" htmlType="submit" block>
             {editingProduct ? "Update Product" : "Save Product"}
           </Button>
-        </PHForm>
+        </EliteForm>
       </Modal>
     </div>
   );

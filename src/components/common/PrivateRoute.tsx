@@ -1,7 +1,8 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { logout, useCurrentToken, useCurrentUser } from '../../redux/auth/authSlice';
+import { useAppDispatch } from '../../redux/hooks';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
@@ -9,7 +10,10 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requireAdmin = false }) => {
-  const { token, user } = useSelector((state: RootState) => state.auth);
+  const user= useSelector(useCurrentUser);
+  const token= useSelector(useCurrentToken);
+  const dispatch = useAppDispatch()
+
   const location = useLocation();
 
   if (!token) {
@@ -17,7 +21,9 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requireAdmin = fa
   }
 
   if (requireAdmin && user?.role !== 'admin') {
-    return <Navigate to="/dashboard" replace />;
+    dispatch(logout())
+
+    return <Navigate to="/login" replace />;
   }
 
   return <>{children}</>;

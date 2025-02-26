@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, Tag, Button, Space, Select, Tooltip } from "antd";
-import { Mail, UserCog, Shield, Ban, CheckCircle, Divide } from "lucide-react";
+import { Mail, UserCog, Shield, Ban, CheckCircle,  } from "lucide-react";
 
 interface User {
   _id: string;

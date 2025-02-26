@@ -12,7 +12,7 @@ type TInputProps = {
   defaultValue?: any;
 };
 
-const PHTextArea = ({
+const EliteTextArea = ({
   name,
   label,
   placeholder = "Enter text...",
@@ -47,4 +47,4 @@ const PHTextArea = ({
   );
 };
 
-export default PHTextArea;
+export default EliteTextArea;

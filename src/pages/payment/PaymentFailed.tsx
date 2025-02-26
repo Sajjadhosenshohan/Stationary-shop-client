@@ -1,9 +1,7 @@
 import { Button, Result } from "antd";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const PaymentFailed = () => {
-  const { transactionId } = useParams();
-  console.log(transactionId);
   return (
     <div className="flex items-center justify-center min-h-screen">
       <div className="bg-white p-20 rounded-2xl">
