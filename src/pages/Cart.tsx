@@ -49,7 +49,7 @@ const Cart: React.FC = () => {
     };
     console.log(orderInfo);
     const result = await addOrder(orderInfo).unwrap();
-    handleClearCart()
+    handleClearCart();
     window.location.replace(result.url);
   };
 
@@ -79,10 +79,6 @@ const Cart: React.FC = () => {
             alt={text}
             className="w-16 h-16 object-cover rounded mr-4"
           />
-          <div>
-            <h3 className="font-medium">{text}</h3>
-            <p className="text-sm text-gray-500">{record.category}</p>
-          </div>
         </div>
       ),
     },
@@ -90,6 +86,26 @@ const Cart: React.FC = () => {
       title: "Price",
       dataIndex: "price",
       render: (price: number) => `$${Number(price)?.toFixed(2)}`,
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      render: (description: string) => (
+        <div>
+          {/* <h3 className="font-medium">{text}</h3> */}
+          <p className="text-sm text-gray-500">{description}</p>
+        </div>
+      ),
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      render: (category: string) => (
+        <div>
+          {/* <h3 className="font-medium">{text}</h3> */}
+          <p className="text-sm text-gray-500">{category}</p>
+        </div>
+      ),
     },
     {
       title: "Quantity",
@@ -146,7 +162,7 @@ const Cart: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 w-full overflow-x-auto  bg-white">
           <Table
             columns={columns}
             dataSource={items}

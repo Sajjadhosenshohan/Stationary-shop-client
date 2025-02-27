@@ -10,7 +10,7 @@ export const PaymentFailed = () => {
           title="Order Failed!"
           subTitle={`Please check again `}
           extra={[
-            <Button key="buy">Back to home</Button>,
+            <Button key="buy" className="md:mr-5 mb-5">Back to home</Button>,
             
             <Link to="/products">
               <Button type="primary" key="console">

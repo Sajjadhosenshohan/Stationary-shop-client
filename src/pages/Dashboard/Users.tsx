@@ -47,21 +47,21 @@ const Users: React.FC = () => {
     }
   };
   return (
-        <div className="bg-white rounded-lg shadow-sm p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">
-              User Management
-            </h1>
-          </div>
-
-          <UserManagementTable
-            users={response?.data || []}
-            loading={isFetching}
-            onActivate={handleActivate}
-            onDeactivate={handleDeactivate}
-            onRoleChange={handleRoleChange}
-          />
+    <div className="overflow-x-auto my-12">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">User Management</h1>
         </div>
+      <div className="bg-white rounded-lg shadow-sm p-6 w-full overflow-x-auto ">
+
+        <UserManagementTable
+          users={response?.data || []}
+          loading={isFetching}
+          onActivate={handleActivate}
+          onDeactivate={handleDeactivate}
+          onRoleChange={handleRoleChange}
+        />
+      </div>
+    </div>
   );
 };
 

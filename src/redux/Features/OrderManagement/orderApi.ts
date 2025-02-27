@@ -10,12 +10,10 @@ const orderApi = baseApi.injectEndpoints({
       }),
     }),
     getAdminOrdersData: builder.query({
-      query: (userEmail) => ({
+      query: () => ({
         url: "/payment/get-admin-order-data",
-        method: "POST",
-        body: { email: userEmail },
-        
-      }),
+        method: "GET"
+      })
     }),
     getUserOrdersData: builder.query({
       query: (userEmail) => ({

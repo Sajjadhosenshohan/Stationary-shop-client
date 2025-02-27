@@ -6,7 +6,8 @@ import {
   
   const baseQuery = fetchBaseQuery({
 //https://stationary-shop-server-nu.vercel.app
-    baseUrl: `http://localhost:5000/api/v1`,
+//http://localhost:5000
+    baseUrl: `https://stationary-shop-server-nu.vercel.app/api/v1`,
     credentials: 'include',
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;

@@ -117,7 +117,7 @@ const Dashboard: React.FC = () => {
       )}
       <Sider
         theme="light"
-        className={`border-r border-gray-200 ${
+        className={`bg-white border-r border-gray-200 ${
           collapsed ? "hidden" : "block"
         } md:block relative md:relative z-40`}
         width={300}

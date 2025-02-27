@@ -10,14 +10,12 @@ const PaymentSuccess = () => {
           title="Successfully Purchased The Products!"
           subTitle={`Transaction Id: ${transactionId}`}
           extra={[
-            <Button key="buy">Back to home</Button>,
-            
+            <Button key="buy" className="md:mr-5 mb-5">Back to home</Button>,
             <Link to="/dashboard/order-history">
-              <Button type="primary" key="console">
-                Show order history
-              </Button>
-            </Link>,
+              <Button type="primary" key="console">Show order history</Button>
+            </Link>
           ]}
+          
         />
       </div>
     </div>

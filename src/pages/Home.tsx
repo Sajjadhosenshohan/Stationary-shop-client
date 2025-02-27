@@ -35,7 +35,7 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <Carousel className="mb-12" autoplay autoplaySpeed={5000}>
+      <Carousel className="mb-12 " autoplay autoplaySpeed={5000}>
         {carouselItems.map((item, index) => (
           <div
             key={index}
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-transparent" />
 
             {/* Centered Text */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center w-4/5 mx-auto md:w-full">
               <div className="text-center text-white px-6 py-4 bg-black/40 rounded-lg">
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                   {item.title}
@@ -68,6 +68,7 @@ const Home: React.FC = () => {
           </div>
         ))}
       </Carousel>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* features product */}
         <section className="mb-16">

@@ -16,11 +16,13 @@ const Orders: React.FC = () => {
   const user = useAppSelector(useCurrentUser);
   const [deleteOrder] = useDeleteOrderMutation();
   const [changeOrderStatus] = useChangeOrderStatusMutation();
-  const { data: res, isFetching } = useGetAdminOrdersDataQuery(user?.email, {
+  const { data: res, isFetching } = useGetAdminOrdersDataQuery( {
     refetchOnFocus: true,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
+
+  console.log(res, "orders")
   // modal related
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deletedInfo, setDeletedInfo] = useState({
@@ -143,7 +145,7 @@ const Orders: React.FC = () => {
         <h3 className="text-lg font-medium mb-4">Order Products</h3>
         <Table
           columns={productColumns}
-          dataSource={modifiedProducts} // এখানে পরিবর্তিত ডাটা ব্যবহার করছি
+          dataSource={modifiedProducts}
           pagination={false}
           rowKey="_id"
           className="nested-table"
@@ -211,7 +213,7 @@ const Orders: React.FC = () => {
 
   return (
     <div className="overflow-x-auto">
-      <h1 className="text-2xl font-bold my-12">Order History</h1>
+      <h1 className="text-2xl font-bold my-12">Manage Orders</h1>
 
       <div className="w-full overflow-x-auto  bg-white">
         <Table

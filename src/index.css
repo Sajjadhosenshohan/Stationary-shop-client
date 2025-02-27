@@ -23,3 +23,8 @@
   .img_field {
     width: 100%;
   }
+
+  .order_history_btn{
+    margin-top: 40px!important;
+    margin-left: 10px;
+  }

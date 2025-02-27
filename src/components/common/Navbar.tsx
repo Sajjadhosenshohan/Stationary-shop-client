@@ -54,11 +54,11 @@ const Navbar: React.FC = () => {
 
   const navigationItems = [
     { key: "/", label: "Home", icon: <Home className="h-5 w-5" /> },
-    {
-      key: roleBaseRoute,
-      label: "Dashboard",
-      icon: <LayoutDashboard className="h-5 w-5" />,
-    },
+    // {
+    //   key: roleBaseRoute,
+    //   label: "Dashboard",
+    //   icon: <LayoutDashboard className="h-5 w-5" />,
+    // },
     {
       key: "/products",
       label: "All Products",
